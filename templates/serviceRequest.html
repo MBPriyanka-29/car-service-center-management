@@ -1,0 +1,312 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+    <title>SERVICE REQUEST</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 25px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+            margin-left: 1700;
+            margin-right: 30;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            margin-left: 1700;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .success_add {
+            padding: 8px;
+            background-color: #bedbbb;
+        }
+
+        form {
+            margin-bottom: 0px;
+        }
+
+        body {
+            margin: 0 0 0 0;
+        }
+
+        .head {
+            background-color: #bbe1fa;
+            padding-top: 20;
+        }
+
+        .service_details {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        textarea {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        textarea:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        select {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        select:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        input[type=text],
+        input[type=time],
+        input[type=date] {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            height: 40px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=date],
+        input[type=time] {
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus,
+        input[type=time]:focus,
+        input[type=date]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        .l1 {
+            width: 300px;
+            position: static;
+            display: inline-block;
+            margin-right: 30;
+        }
+
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        .request {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 20%;
+        }
+
+        .request:hover {
+            opacity: 1;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+    </style>
+</head>
+
+<body>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/dashboard_c" style="margin-left: 20;">Back to Dashboard</a>
+        <a style="margin-left: 1500;" href="/serviceHistory">Service History</a>
+    </div>
+
+    <div class="service_details" style="text-align: center;">
+
+        <h1 class="heading1" style="margin-top: 50px; margin-bottom: 50px;">Request for service</h1>
+
+        <form id="addService" method="POST" action="">
+
+            
+
+            <label class="l1" for="car_name" id="car_name">Car Name : </label>
+            <input type="text" name="car_name"><br>
+
+            <label class="l1" for="company" id="company">Car Brand : </label>
+            <input type="text" name="company"><br>
+
+            <label class="l1" for="model" id="model">Car Model : </label>
+            <input type="text" name="model"><br>
+
+            <label class="l1" id="Registration_num" style="width: 250; margin-right: 0;" for="Registration_num">Registration number: </label>
+            <input type="text" name="Registration_num"><br>
+
+            <label class="l1" for="s_name">Service Name : </label>
+            <select style="width: 300;" class="l1" name="s_name" id="s_name">
+                <option value="OilFilterChange">Oil and Filter Change</option>
+                <option value="BasicOrInterim">Basic Or Interim Service</option>
+                <option value="FullService">Full Service</option>
+                <option value="MajorService">Major Service</option>
+                <option value="ManufacturersService">Manufacturers’ Service</option>
+            </select>
+            <br>
+            <br>
+            <label class="l1" for="specs">Service specifications :</label>
+            <textarea form="addService" name="specs" id="specs" cols="15" rows="5"></textarea><br>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function(event) { 
+                    document.getElementById('specs').value = 'NA';
+                    /*
+                       document.getElementById('car_name').value = 'Swift Dzire';
+                    document.getElementById('company').value = 'Maruti suzuki';
+                    document.getElementById('model').value = 'Dzire LXI';
+                    document.getElementById('Registration_num').value = 'KA 01 EH 4923';
+                    */
+                    
+                });
+            </script>
+
+
+            <label class="l1" for="service_date">Service date :</label>
+            <input type="date" name="service_date"><br><br>
+
+            <label class="l1" for="service_time">Service time :</label>
+            <input type="time" name="service_time"><br><br>
+
+            <label class="l1" for="delivery_type">Delivery type :</label>
+            <select class="l1" onchange="yesnoCheck(this);" name="delivery_type" id="delivery_type">
+                <option value="drop">drop Service</option>
+                <option value="pickup">Pickup Service</option>
+                
+            </select>
+            <br><br>
+
+            <script>
+                function yesnoCheck(that) {
+                    if (that.value == "pickup") {
+                        alert("Enter pickup location!");
+                        document.getElementById("ifYes").style.display = "block";
+                    } else {
+                        document.getElementById("ifYes").style.display = "none";
+                    }
+                }
+            </script>
+
+            <div id="ifYes" style="display: none;">
+                <label class="l1" for="address">Pickup location :</label>
+            <textarea form="addService" name="address" id="address" cols="15" rows="5"></textarea><br>
+
+            <label class="l1" for="pincode">Pincode :</label>
+            <input type="text" name="pincode"><br>
+
+            </div>
+
+            <button type="submit" name="RequestButton" value="RequestButton" class="request">Request Service</button>
+        </form>
+    </div>
+</body>
+
+</html>

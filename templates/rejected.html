@@ -1,0 +1,139 @@
+<html>
+
+<head>
+    <title>Rejected</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+
+        .modify {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+
+        #services {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #services td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #services tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #services tr:hover {
+            background-color: #ddd;
+        }
+
+        #services th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #c40889;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/">Logout</a>
+        <a style="margin-left: 1200;" href="/dashboard_a"> Back to Dashboard</a>
+    </div>
+    
+    <div class="modify">
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">REJECTED Service Requests</h1>
+
+
+
+        <table id="services" style="width:90%; text-align: center; margin-left:auto;margin-right:auto;">
+            <tr>
+                <th>VEHICLE NAME</th>
+                <th>SERVICE TYPE</th>
+                <th>SERVICE REQUEST DATE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+            </tr>
+            {%for cs in car_service %}
+            <tr>
+                <td>{{cs['car_name']}}</td>
+                <td>{{cs['s_name']}}</td>
+                <td>{{cs['service_request_date']}}</td>
+                {%if cs['s_status']==2 %}
+                <td style="color: green;">request accepted</td>
+                {% elif cs['s_status']==1 %}
+                <td style="color:red;">request Cancelled</td>
+                {% else %}
+                <td style="color:orange;">Wait for admin approval </td>
+                {%endif%}
+                <td><a href="/rejected?view={{cs['service_id']}}">View details</a></td>
+            </tr>
+            {%endfor%}
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>

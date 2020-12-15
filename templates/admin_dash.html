@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <title>Dashboard</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <style>
+            .i1
+            {
+                    margin: 20px;
+            }
+            .navbar 
+            {
+                overflow: hidden;
+                background-color: #333;
+                font-family: Arial;
+                margin-bottom: 50px;
+            }
+            .navbar a 
+            {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            .navbar a:hover, .dropdown:hover .dropbtn 
+            {
+                background-color: red;
+            }
+            .div1{
+                font-size: 25; 
+                padding: 40 30 60 ; 
+                text-align: right; 
+            }
+            body{
+                margin: 0;
+            }
+            .product-row{
+                margin: 20px;
+                width:30%;
+                float: left;
+            }
+            .product-img{
+                width: 180;
+                height: 180;
+                float: left;
+                margin-left: 20px;
+                margin-right: 30;
+            }
+            .x{
+                font-weight: bold;
+            }
+            .success {
+                padding: 12px;
+                border-radius: 3px;
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+                color: black;
+                background-color: #bedbbb;
+            }
+
+            .error {
+                padding: 12px;
+                border-radius: 3px;
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+                background-color: #ce6262;
+                color: black;
+            }
+        </style>
+        </head>
+
+        <body>
+
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class={{category}}>{{ message }}</div>
+        {% endfor %}
+        <div class="navbar">
+            <a style="margin-left: 1260; margin-right: 40;" href="/addProduct">+ Product</a>
+            <a href="/">Logout</a>
+        </div>
+        <h2 style="text-align: center;">YOUR  PRODUCTS</h2>
+        {% for oproducts in products %}
+        <div class="product-row" onclick="window.location.href = '/dashboard_o?view={{oproducts.product_id}}'">
+
+            {% for key in pid_images.keys() %}
+            {%if key== oproducts['product_id']%}
+            <img class="product-img" src="{{pid_images[key]}}" alt="">
+            {% endif %}
+            {% endfor %}
+            <p style="font-weight: bold; font-size: 20;">{{oproducts['p_name']}}</p>
+            <p style="font-size: 18;">{{oproducts['p_type']}}</p>
+
+            <p class="x">Product: 
+            {% if oproducts.availability == 1 %}
+            <span style="color:green">Available</span>
+            {% else %}
+            <span style="color: red;">Not available</span>
+            {% endif %}
+            </p>
+
+            <p class="x">Operator: 
+            {% if oproducts.op_availability == 1 %}
+            <span style="color:green">Available</span>
+            {% else %}
+            <span style="color:red;">Not available</span>
+            {% endif %}
+            </p>
+
+            <p><span class="x">Price</span><span class="x">(/day): </span><span>₹{{oproducts['rent']}}</span></p>
+        </div>
+        {% endfor %}
+
+    </body>
+</html>

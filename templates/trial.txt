@@ -1,0 +1,205 @@
+@app.route('/serviceHistory', methods=['GET', 'POST'])
+def serviceHistory():
+    services=[]
+    car=[]
+   
+    cur1 = mysql.connection.cursor()
+    cur = mysql.connection.cursor()
+    cid=session['cid']
+    result_s=cur1.execute("select * FROM service where customer_id = %s",(cid,))
+    cur2 = mysql.connection.cursor()
+    result_c=cur2.execute("select * FROM car where customer_id = %s",(cid,))   
+    #print("pls")
+    cur.execute("SELECT * FROM car_claims_service ")
+    car_service=cur.fetchall()
+    #print(car_service)
+    if((result_s > 0) and (result_c>0) ):
+        services = cur1.fetchall()
+        print(services)
+        sid=[s['service_id'] for s in services]
+        print()
+        print(sid)
+        car=cur2.fetchall()
+    else:
+        flash("No Services added!",'error')
+        return render_template('dashboard_c.html')
+    cur1.close()
+    cur2.close()
+    if 'view' in request.args:
+        service_id = request.args['view']
+        curso = mysql.connection.cursor()
+        curso.execute("SELECT * FROM service WHERE service_id = %s", (service_id,))
+        indiservice = curso.fetchall()
+        #print("Printing services!!")
+        print(indiservice)
+        #print("individual")
+        #print(indiservice[0]['delivery_type'])
+        #print(indiservice.delivery_type)
+        headings=['SERVICE REQUESTED ON','SERVICE TYPE','SERVICE DATE','TIME','SERVICE PRICE','SPECIFICATIONS','DELIVERY TYPE','PICKUP ADDRESS','PINCODE','STATUS OF REQUEST']
+        return render_template('viewServiceRequest.html',indiservice=indiservice,headings=headings)
+    return render_template('serviceHistory.html',services=services,car=car,car_service=car_service)
+
+
+#################
+
+<html>
+
+<head>
+    <title>Service History</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+
+        .modify {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+
+        #services {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #services td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #services tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #services tr:hover {
+            background-color: #ddd;
+        }
+
+        #services th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #595b83;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/">Logout</a>
+        <a href="/dashboard_c"> Back to Dashboard</a>
+        <a style="margin-left: 1400;" href="/serviceRequest"> serviceRequest</a>
+
+    </div>
+
+    <div class="modify">
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">View Service History</h1>
+
+
+
+        <table id="services" style="width:90%; text-align: center; margin-left:auto;margin-right:auto;">
+            <tr>
+                <th>VEHICLE NAME</th>
+                <th>SERVICE TYPE</th>
+                <th>SERVICE REQUEST DATE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+            </tr>
+
+            {% set status_before = [] %}
+
+            {%for s in services %}
+            {%for c in car %}
+            {%for cs in car_service %}
+            <tr>
+
+                {%if (cs['service_id']==s['service_id']) and (cs['car_id']==c['car_id']) and (s['customer_id']==c['customer_id']) %}
+
+                {% if s['service_id'] not in status_before %}
+                
+                <td>{{c['car_name']}}</td>
+                <td>{{s['s_name']}}</td>
+                <td>{{s['service_request_date']}}</td>
+                {%if s['status']==2 %}
+                <td style="color: green;">request accepted</td>
+                {% elif s['status']==1 %}
+                <td style="color:red;">request Cancelled</td>
+                {% else %}
+                <td style="color:orange;">Wait for admin approval </td>
+                {%endif%}
+                <td><a href="/serviceHistory?view={{s['service_id']}}">View details</a></td>
+                {% set __ = status_before.append(s['service_id']) %}
+                {% endif %}
+                {%endif%}
+
+            </tr>
+            {%endfor%}
+            {%endfor%}
+            {%endfor%}
+
+
+
+        </table>
+
+
+
+    </div>
+
+</body>
+
+</html>

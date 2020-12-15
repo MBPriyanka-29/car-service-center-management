@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <title>Admin Dashboard</title>
+        <style>
+            .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 25px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+           
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+         
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+            body{
+                margin: 0;
+            }
+            
+            .success {
+                padding: 12px;
+                border-radius: 3px;
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+                color: black;
+                background-color: #bedbbb;
+            }
+
+            .error {
+                padding: 12px;
+                border-radius: 3px;
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+                background-color: #ce6262;
+                color: black;
+            }
+            .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+        </style>
+        </head>
+
+        <body>
+
+           {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+        <div class="navbar">
+            <a  href="/">Logout</a>
+            
+            
+            <div  style="margin-left: 1350;" class="dropdown">
+                <button class="dropbtn">Mechanics
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <div  class="dropdown-content">
+                    <a href="/addMechanics">Add Mechanics</a>
+                    <a href="/viewMechanics">View Mechanics</a>
+                </div>
+            </div>
+
+           
+
+            <div class="dropdown">
+                <button class="dropbtn">Service Requests
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <div  class="dropdown-content">
+                    <a href="/new">New</a>
+                    <a href="/rejected">Rejected</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button  class="dropbtn">Servicing
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/pending">Pending</a>
+                    <a href="/completed">Completed</a>
+                </div>
+            </div>
+
+        </div>
+        
+        <div style="text-align: center;">
+
+            <h1 class="heading1" style="margin-top: 50px; margin-bottom: 50px;">Welcome {{a_name}}!</h1>
+        </div>
+    </body>
+</html>

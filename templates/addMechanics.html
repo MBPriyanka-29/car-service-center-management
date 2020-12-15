@@ -1,0 +1,253 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+    <title>Add Mechanics</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 25px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+            margin-left: 1700;
+            margin-right: 30;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            margin-left: 1700;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .success_add {
+            padding: 8px;
+            background-color: #bedbbb;
+        }
+
+        form {
+            margin-bottom: 0px;
+        }
+
+        body {
+            margin: 0 0 0 0;
+        }
+
+        .head {
+            background-color: #bbe1fa;
+            padding-top: 20;
+        }
+
+        .mechanic_details {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        textarea {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        textarea:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        select {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        select:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        input[type=text] {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            height: 40px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=date] {
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus,
+        input[type=date]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        .l1 {
+            width: 300px;
+            position: static;
+            display: inline-block;
+        }
+
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        .addMechanic {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 20%;
+        }
+
+        .addMechanic:hover {
+            opacity: 1;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+        .heading1 {
+            color:  black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+    </style>
+</head>
+
+<body>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/dashboard_a" style="margin-left: 20;">Back to Dashboard</a>
+        <a style="margin-left: 1500;" href="/viewMechanics">View Mechanics</a>
+    </div>
+
+    <div class="mechanic_details" style="text-align: center;">
+
+        <h1 class="heading1" style="margin-top: 100px; margin-bottom: 100px;">Add Mechanic details</h1>
+
+        <form id="addMech" method="POST" action="">
+
+
+            <label class="l1" for="m_fname">First Name : </label>
+            <input type="text" name="m_fname"><br><br>
+
+            <label class="l1" for="m_lname">Last Name : </label>
+            <input type="text" name="m_lname"><br><br>
+
+            <p>Please select your gender:</p>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+            <input type="radio" id="other" name="gender" value="other">
+            <label for="other">Other</label>
+            <br>
+            <br>
+            <br>
+
+            <label class="l1" for="phone_num">Phone Number :</label>
+            <input type="text" name="phone_num">
+<br>
+            <br>
+            <br>
+            <button type="submit" name="addMechanicButton" value="MechanicButton" class="addMechanic">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>

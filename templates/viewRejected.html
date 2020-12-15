@@ -1,0 +1,285 @@
+<html>
+
+<head>
+    <title>View Rejected</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+
+        .modify {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+
+        }
+
+
+        #services {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 60%;
+        }
+
+        #services td {
+            width: 80%;
+        }
+
+        #services td,
+        #services th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #services tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #services tr:hover {
+            background-color: #ddd;
+        }
+
+        #services th:hover {
+            background-color: #db86c0;
+        }
+
+        #services th {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+            font-size: 20;
+            background-color: #c40889;
+            color: white;
+            width: 30%;
+        }
+
+        .request {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 20%;
+
+            position: relative;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .request:hover {
+            opacity: 1;
+        }
+
+        select {
+            width: 250px;
+            padding: 15px;
+            margin-left: 10px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        .l1 {
+            width: 300px;
+            position: static;
+            display: inline-block;
+            margin-right: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/">Logout</a>
+        <a href="/dashboard_a"> Back to Dashboard</a>
+        <a style="margin-left: 1300;" href="/rejected">Rejected requests</a>
+
+    </div>
+
+    <div class="modify">
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 80px;">View REJECTED service request</h1>
+        <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 100;">
+
+            {%for s in indiservice %}
+            <tr>
+                <th>{{headings[0]}}</th>
+                <td>{{s['service_request_date']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[1]}}</th>
+                <td>{{s['car_name']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[2]}}</th>
+                <td>{{s['company']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[3]}}</th>
+                <td>{{s['model']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[4]}}</th>
+                <td>{{s['Registration_num']}}</td>
+
+            </tr>
+
+
+            <tr>
+                <th>{{headings[5]}}</th>
+                <td>{{s['s_name']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[6]}}</th>
+                <td>{{s['s_date']}}</td>
+
+            </tr>
+            <tr>
+                <th>{{headings[7]}}</th>
+                <td>{{s['s_time']}}</td>
+            </tr>
+
+            <tr>
+                <th>{{headings[8]}}</th>
+                <td>{{s['Specifications']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[9]}}</th>
+                <td>{{s['delivery_type']}}</td>
+            </tr>
+
+            <tr>
+                <th>{{headings[10]}}</th>
+                <td>{{s['address']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[11]}}</th>
+                <td>{{s['pincode']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[12]}}</th>
+                <td>{{s['admin_remark']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[13]}}</th>
+                <td>{{s['admin_remark_date']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[14]}}</th>
+                {%if s['admin_status']==1 %}
+                <td style="color: green;">Finalisation is done</td>
+                {% else %}
+                <td style="color:orange;">Yet to be finalised </td>
+                {%endif%}
+            </tr>
+
+
+            {%endfor%}
+        </table>
+
+
+        <form method="POST">
+
+
+            <label class="l1" for="check">Do you want to update your service request selection? :</label>
+            <br>
+            <select class="l1" onchange="yesnoCheck(this);" name="check" id="check">
+                <option value="no">NO </option>
+                <option value="yes">YES</option>
+            </select>
+            <br><br>
+
+            
+            <script>
+                function yesnoCheck(that) {
+                    if (that.value == "yes") {
+                        alert("Enter your choice!");
+                        document.getElementById("ifYes").style.display = "block";
+                    } else {
+                        document.getElementById("ifYes").style.display = "none";
+                    }
+                }
+            </script>
+
+<div class="button">
+    <button type="submit" name="update" value="update" class="request">
+        Service status updated</button>
+</div>
+
+            <div id="ifYes" style="display: none;">
+
+                <select style="width: 300;" class="l1" name="s_status" id="s_status">
+                    <option value="rejected">Rejected</option>
+                    <option value="selected">Selected</option>
+                    <br> <br>
+            </div>
+            
+       
+        </form>
+
+    </div>
+</body>
+
+</html>

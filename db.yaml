@@ -1,0 +1,6 @@
+mysql_host: 'localhost'
+mysql_user: 'root'
+mysql_password: 'password'
+mysql_db: 'car_service_management_system'
+mysql_cursorclass: 'DictCursor'
+uploaded_photos_dest: 'static/image/'

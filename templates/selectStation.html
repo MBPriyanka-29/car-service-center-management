@@ -1,0 +1,236 @@
+<html>
+
+<head>
+    <title>Select Service station</title>
+    <style>
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 25px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        select {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        #stations {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #stations td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #stations tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #stations tr:hover {
+            background-color: #ddd;
+        }
+
+        #stations th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #c40889;
+            color: white;
+        }
+
+        .heading1 {
+            color: black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+
+        select {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        select:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        .l1 {
+            width: 300px;
+            position: static;
+            display: inline-block;
+            margin-right: 30;
+        }
+        .station {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 20%;
+        }
+
+        .station:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+
+    <div class="navbar">
+        <a href="/">Logout</a>
+        <a style="margin-left: 1650;" href="/dashboard_c">Dashbaord</a>
+
+    </div>
+
+    <div  style="text-align: center;">
+
+        <h1 class="heading1" style="margin-top: 50px; margin-bottom: 50px;">Choose the service station from the below options</h1>
+        <table id="stations" style="width:90%; text-align: center; margin-left:auto;margin-right:auto; margin-top: 50; margin-bottom: 100;">
+            <tr>
+                <th>STATION NAME</th>
+                <th>DISTRICT</th>
+                <th>ADDRESS</th>
+                <th>PINCODE</th>
+                <th>STATION ID</th>
+             
+            </tr>
+            {%for s in stations %}
+            <tr>
+                <td>{{s['s_name']}}</td>
+                <td>{{s['district']}}</td>
+                <td>{{s['first_address']}}</td>
+                <td>{{s['pincode']}}</td>
+                <td>{{s['station_id']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+    <div style="margin-top: 200; margin-bottom: 200;">
+
+        <form method="POST">
+            <label class="l1" for="s_name">Select a station : </label>
+            <select style="width: 300;" class="l1" name="s_name" id="s_name">
+                {%for s in stations %}
+                <option value="{{s['s_name']}}">{{s['s_name']}}</option>
+                {%endfor%}
+             
+            </select>
+            <br>
+            <br>
+            <button style="margin-bottom: 100; margin-top: 200;" type="submit" name="stationButton" value="stationButton" class="station">Select Service station</button>
+        </form>
+      
+    </div>
+   
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+    <title>Admin registration</title>
+    <style>
+        .i1
+        {
+            margin: 20px;
+        }
+        .navbar 
+        {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial;
+            margin-bottom: 50px;
+        }
+        .navbar a 
+        {
+            float: left;
+            font-size: 25px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover, .dropdown:hover .dropbtn 
+        {
+            background-color: red;
+        }
+        form {
+            margin-bottom: 0px;
+        }
+
+        body {
+            margin: 0 0 0 0;
+        }
+
+        .head {
+            background-color: #bbe1fa;
+            padding-top: 20;
+
+        }
+
+        .customer_details {
+            padding: 0px;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        textarea {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        textarea:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        input[type=text],
+        input[type=email],
+        input[type=date],
+        input[type=password] {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            height: 40px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus,
+        input[type=email]:focus,
+        input[type=date]:focus,
+        input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        .l1 {
+            width: 300px;
+            position: static;
+            display: inline-block;
+        }
+
+        /* Overwrite default styles of hr */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* Set a style for the submit button */
+        .registerbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+
+            opacity: 0.9;
+
+            margin-bottom: 40px;
+        }
+
+        .registerbtn:hover {
+            opacity: 1;
+        }
+
+        /* Add a blue text color to links */
+        a {
+            color: dodgerblue;
+        }
+
+        .bottom1 {
+            padding: 20px;
+            margin: 0px;
+        }
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+        
+        .heading1 {
+            color:  black;
+            text-shadow: 3px 3px 5px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            font-size: 50;
+        }
+
+        </style>
+        </head>
+
+    <body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class={{category}}>{{ message }}</div>
+    {% endfor %}
+    <div class="navbar">
+        <a href="/" style="margin-left: 20;">Back to Dashboard</a>
+        <a href="/login" style="margin-left: 1600;">LogIn</a>
+    </div>
+    
+    <form id="ad" method="POST" action="">
+
+        <div class="customer_details">
+            <h1 class="heading1">ADMIN REGISTRATION</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+            <label class="l1" for="admin_id">Adhaar card number : </label>
+            <input type="text" name="admin_id"><br>
+
+            <label class="l1" for="a_fname">First Name : </label>
+            <input type="text" name="a_fname"><br>
+
+            <label class="l1" for="a_lname">Last Name : </label>
+            <input type="text" name="a_lname"><br>
+
+            <label class="l1" for="email">Email address :</label>
+            <input type="email" name="email"><br>
+
+            <label class="l1" for="s_name">Service Station Name you work for : </label>
+            <input type="text" name="s_name"><br>
+
+            <label class="l1" for="s_num">Service Station Reception number : </label>
+            <input type="text" name="s_num"><br>
+
+            <label class="l1" for="first_address">First Address :</label>
+            <textarea form="ad" name="first_address" id="first_address" cols="30" rows="10"></textarea><br>
+
+            <label class="l1" for="district">District :</label>
+        <select class="l1" name="district" id="district">
+            <option value="Bagalkot">Bagalkot</option>
+            <option value="Ballari">Ballari</option>
+            <option value="Bengaluru_Rural">Bengaluru Rural</option>
+            <option value="Bengaluru_Urban">Bengaluru Urban</option>
+            <option value="Bidar">Bidar</option>
+            <option value="Chamarajanagar">Chamarajanagar</option>
+            <option value="Chikballapur">Chikballapur</option>    
+            <option value="Chikkamagaluru">Chikkamagaluru</option>    
+            <option value="Chitradurga">Chitradurga</option>    
+            <option value="Dakshina_Kannada">Dakshina Kannada</option>    
+            <option value="Davangere">Davangere</option>               
+            <option value="Dharwad">Dharwad</option>    
+            <option value="Gadag">Gadag</option>    
+            <option value="Hassan">Hassan</option>    
+            <option value="Haveri">Haveri</option>    
+            <option value="Gulbarga">Gulbarga</option>    
+            <option value="Kodagu">Kodagu</option> 
+            <option value="Kolar">Kolar</option>       
+            <option value="Kodagu">Kodagu</option>    
+            <option value="Koppal">Koppal</option>    
+            <option value="Mandya">Mandya</option>    
+            <option value="Mysuru">Mysuru</option> 
+            <option value="Raichur">Raichur</option> 
+            <option value="Ramanagara">Ramanagara</option>    
+            <option value="Shivamogga">Shivamogga</option>
+            <option value="Tumkur">Tumkur</option>
+            <option value="Udupi">Udupi</option>
+            <option value="Uttara_Kannada">Uttara Kannada</option>
+            <option value="Vijayapura">Vijayapura</option>
+            <option value="Yadgir">Yadgir</option>
+        </select> <br><br>
+
+            <label class="l1" for="pincode">Pincode :</label>
+            <input type="text" name="pincode"><br>
+
+            <label class="l1" for="pswd">PASSWORD :</label>
+            <input type="password" name="pswd"><br>
+            <label class="l1" for="re_enter_password">RENTER PASSWORD :</label>
+            <input type="password" name="re_enter_password"><br>
+            <br>
+            <button type="submit" name="submit_button" value="submit_registration"
+                class="registerbtn">Register</button>
+        </div>
+    </form>
+    
+</body>
+
+<html lang="en">
