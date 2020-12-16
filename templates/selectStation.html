@@ -107,7 +107,7 @@
         }
 
         #stations td,
-        #customers th {
+        #stations th {
             border: 1px solid #ddd;
             padding: 8px;
         }
@@ -120,20 +120,26 @@
             background-color: #ddd;
         }
 
+        #stations th:hover {
+            background-color: #686d76;
+        }
+        /*373a40 and 686d76 */
+       
         #stations th {
-            padding-top: 12px;
-            padding-bottom: 12px;
+            padding-top: 20px;
+            padding-bottom: 20px;
             text-align: center;
-            background-color: #c40889;
+            background-color: #384259;
             color: white;
         }
+
 
         .heading1 {
             color: black;
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
-            font-size: 50;
+            font-size: 40;
         }
 
         select {
@@ -159,8 +165,10 @@
             margin-right: 30;
         }
         .station {
-            background-color: #4CAF50;
+           
+            background-color: #0278ae;
             color: white;
+            font-weight: bold;
             font-size: 20;
             padding: 16px 20px;
             margin: 8px 0;
@@ -174,7 +182,13 @@
 
         .station:hover {
             opacity: 1;
+            background-color: #51adcf;
         }
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
     </style>
 </head>
 
@@ -186,13 +200,14 @@
 
     <div class="navbar">
         <a href="/">Logout</a>
-        <a style="margin-left: 1650;" href="/dashboard_c">Dashbaord</a>
+        <a style="margin-left: 1500;" href="/dashboard_c">Dashbaord</a>
 
     </div>
 
     <div  style="text-align: center;">
 
-        <h1 class="heading1" style="margin-top: 50px; margin-bottom: 50px;">Choose the service station from the below options</h1>
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Choose the service station</h1>
+        <hr>
         <table id="stations" style="width:90%; text-align: center; margin-left:auto;margin-right:auto; margin-top: 50; margin-bottom: 100;">
             <tr>
                 <th>STATION NAME</th>
@@ -200,7 +215,6 @@
                 <th>ADDRESS</th>
                 <th>PINCODE</th>
             
-             
             </tr>
             {%for s in stations %}
             <tr>
@@ -212,7 +226,7 @@
             </tr>
             {%endfor%}
         </table>
-    <div style="margin-top: 200; margin-bottom: 200;">
+    <div style="margin-top: 100; margin-bottom: 100;">
 
         <form method="POST">
             <label class="l1" for="s_name">Select a station : </label>
@@ -224,7 +238,7 @@
             </select>
             <br>
             <br>
-            <button style="margin-bottom: 100; margin-top: 200;" type="submit" name="stationButton" value="stationButton" class="station">Select Service station</button>
+            <button style="margin-bottom: 100; margin-top: 50;" type="submit" name="stationButton" value="stationButton" class="station">Select Service station</button>
         </form>
       
     </div>

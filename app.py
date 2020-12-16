@@ -141,17 +141,16 @@ def login():
             result = cur.execute(
                 "SELECT * FROM login_customer WHERE emailID = %s ", (username,))
             cur1 = mysql.connection.cursor()
-            cur1.execute("SELECT c_fname FROM customer WHERE emailID = %s ", (username,))
-            n=cur1.fetchone()
-            cname=n['c_fname']
-            session['c_name']=cname
-
+           
             if result > 0:
                 data = cur.fetchone()
                 cuid = data['customer_id']
                 session['cid'] = cuid
                 cpassword = data['pswd']
-
+                cur1.execute("SELECT c_fname FROM customer WHERE emailID = %s ", (username,))
+                n=cur1.fetchone()
+                cname=n['c_fname']
+                session['c_name']=cname
                 if cpassword == password_candidate:
                     return redirect(url_for('dashboard_c'))
 
@@ -165,11 +164,7 @@ def login():
                 return render_template('login.html')
 
         else:
-            cur1 = mysql.connection.cursor()
-            cur1.execute("SELECT a_fname FROM admin WHERE emailID = %s ", (username,))
-            n=cur1.fetchone()
-            aname=n['a_fname']
-            session['a_name']=aname
+            
             cur = mysql.connection.cursor()
             result = cur.execute(
                 "SELECT * FROM login_admin WHERE emailID = %s", (username,))
@@ -179,6 +174,11 @@ def login():
                 auid = data['admin_id']
                 session['aid'] = auid
                 apassword = data['pswd']
+                cur1 = mysql.connection.cursor()
+                cur1.execute("SELECT a_fname FROM admin WHERE emailID = %s ", (username,))
+                n=cur1.fetchone()
+                aname=n['a_fname']
+                session['a_name']=aname
 
                 if apassword == password_candidate:
                     return redirect(url_for('dashboard_a'))
@@ -242,6 +242,7 @@ def dashboard_a():
 
 @app.route('/addMechanics', methods=['GET', 'POST'])
 def addMechanics():
+    a_name=session['a_name']
     if request.method == 'POST':
         mechanic = request.form
         m_fname = mechanic['m_fname']
@@ -264,6 +265,7 @@ def addMechanics():
 
 @app.route('/viewMechanics', methods=['GET', 'POST'])
 def viewMechanics():
+    a_name=session['a_name']
     cur = mysql.connection.cursor()
     aid = session['aid']
     result = cur.execute("select * FROM mechanic where admin_id = %s", (aid,))
@@ -271,7 +273,7 @@ def viewMechanics():
         mech = cur.fetchall()
     else:
         flash("No Mechanics to display", 'error')
-        return render_template('dashboard_a.html')
+        return redirect(url_for('dashboard_a'))
 
     mysql.connection.commit()
     cur.close()
@@ -284,6 +286,7 @@ def dashboard_c():
 
 @app.route('/selectStation', methods=['GET', 'POST'])
 def selectStation():
+    c_name=session['c_name']
     cur = mysql.connection.cursor()
     res=cur.execute("SELECT station_id,s_name,district,first_address,pincode FROM service_station ORDER BY district")
     if res>0:
@@ -303,7 +306,7 @@ def selectStation():
 
 @app.route('/serviceRequest/<admin>', methods=['GET', 'POST'])
 def serviceRequest(admin):
-
+    c_name=session['c_name']
     if request.method == 'POST':
         service = request.form
         car_name = service['car_name']
@@ -390,7 +393,7 @@ def serviceRequest(admin):
 
 @app.route('/serviceHistory', methods=['GET', 'POST'])
 def serviceHistory():
-
+    c_name=session['c_name']
     cur1 = mysql.connection.cursor()
     cid = session['cid']
     result_cs = cur1.execute(
@@ -400,7 +403,8 @@ def serviceHistory():
         # print(car_service)
     else:
         flash("No Services added!", 'error')
-        return render_template('dashboard_c.html')
+        return redirect(url_for('dashboard_c'))
+     
     cur1.close()
     if 'view' in request.args:
         service_id = request.args['view']
@@ -415,7 +419,7 @@ def serviceHistory():
 
 @app.route('/new', methods=['GET', 'POST'])
 def new():
-
+    a_name=session['a_name']
     cur1 = mysql.connection.cursor()
     aid = session['aid']
     result_cs = cur1.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.s_status=0 and admin_id = %s",(aid,))
@@ -424,7 +428,7 @@ def new():
         # print(car_service)
     else:
         flash("There are no new service requests!", 'error')
-        return render_template('dashboard_a.html')
+        return redirect(url_for('dashboard_a'))
     cur1.close()
     if 'view' in request.args:
         service_id = request.args['view']
@@ -460,7 +464,7 @@ def new():
 
 @app.route('/rejected', methods=['GET', 'POST'])
 def rejected():
-
+    a_name=session['a_name']
     cur1 = mysql.connection.cursor()
     aid = session['aid']
     result_cs = cur1.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.s_status=1 and admin_id = %s" ,(aid,))
@@ -469,7 +473,7 @@ def rejected():
         # print(car_service)
     else:
         flash("There are no rejected service requests!", 'error')
-        return render_template('dashboard_a.html')
+        return redirect(url_for('dashboard_a'))
     cur1.close()
     if 'view' in request.args:
         service_id = request.args['view']
@@ -504,6 +508,7 @@ def rejected():
 
 @app.route('/pending', methods=['GET', 'POST'])
 def pending():
+    a_name=session['a_name']
     cur1 = mysql.connection.cursor()
     aid = session['aid']
     result_cs = cur1.execute(
@@ -513,7 +518,7 @@ def pending():
         # print(car_service)
     else:
         flash("There are no pending service requests!", 'error')
-        return render_template('dashboard_a.html')
+        return redirect(url_for('dashboard_a'))
     cur1.close()
     if 'view' in request.args:
         service_id = request.args['view']
@@ -560,6 +565,27 @@ def pending():
         return render_template('viewPending.html', indiservice=indiservice, headings=headings)
     return render_template('pending.html', car_service=car_service)
 
+@app.route('/completed', methods=['GET', 'POST'])
+def completed():
+    a_name=session['a_name']
+    cur1 = mysql.connection.cursor()
+    aid = session['aid']
+    result_cs = cur1.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.admin_status=2 and admin_id = %s",(aid,))
+    if((result_cs > 0)):
+        car_service = cur1.fetchall()
+    else:
+        flash("There are no completed services in your station!", 'error')
+        return redirect(url_for('dashboard_a'))
+    cur1.close()
+    if 'view' in request.args:
+        service_id = request.args['view']
+        curso = mysql.connection.cursor()
+        curso.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.service_id = %s", (service_id,))
+        indiservice = curso.fetchall()
+        headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
+                    'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE','REQUEST FINALISATION']
+        return render_template('viewCompleted.html', indiservice=indiservice, headings=headings)
+    return render_template('completed.html', car_service=car_service)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Vie Service Request</title>
+    <title>View Completed</title>
     <style>
         .navbar {
             overflow: hidden;
@@ -159,12 +159,12 @@
     <div class="navbar">
         <a  style="margin-left: 10;" href="/">Logout</a>
         <a  style="margin-left: 20;" href="/dashboard_a"> Back to Dashboard</a>
-        <a style="margin-left: 1130;" href="/new"> New Service Requests</a>
+        <a style="margin-left: 1130;" href="/completed"> Completed Requests</a>
 
     </div>
 
     <div class="modify">
-        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 10px;">View new service requests</h1>
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 10px;">View completed request in detail</h1>
         <hr>
         <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 100;">
 
@@ -219,35 +219,67 @@
                 <th>{{headings[9]}}</th>
                 <td>{{s['delivery_type']}}</td>
             </tr>
-
+            {% if s['delivery_type']=="pickup" %}
+            
             <tr>
                 <th>{{headings[10]}}</th>
-                <td>{{s['address']}}</td>
+                <td>{{s['address']}} </td>
             </tr>
             <tr>
                 <th>{{headings[11]}}</th>
                 <td>{{s['pincode']}}</td>
             </tr>
-            <form method="POST">
-                <tr>
-                    <th>{{headings[12]}}</th>
-                    <td>
-                        <select style="width: 300;" class="l1" name="s_status" id="s_status">
-                            <option value="selected">Selected</option>
-                            <option value="rejected">Rejected</option>
-                    </td>
+            {% endif %}
+           
+            <tr>
+                <th>{{headings[12]}}</th>
+                <td>{{s['admin_remark']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[13]}}</th>
+                <td>{{s['bill_date']}}</td>
+            </tr>
+            <tr>
+                <th>SERVICE AMOUNT :</th>
+                <td>₹ {{s['service_amount']}}</td>
+            </tr>
+            <tr>
+                <th>ADDITIONAL PARTS AMOUNT:</th>
+                <td>₹ {{s['additional_parts']}}</td>
+            </tr>
+            <tr>
+                <th>OTHER AMOUNT :</th>
+                <td>₹ {{s['other_amount']}}</td>
+            </tr>
+          
+            
+            <tr>
+                <th>{{headings[14]}}</th>
+                {%if s['s_status']==2 %}
+                <td style="color: green; font-weight: bold;">request accepted</td>
+                {% elif s['s_status']==1 %}
+                <td style="color:red; font-weight: bold;">request Cancelled</td>
 
-                </tr> <br> <br>
-                {%endfor%}
+                {% else %}
+                <td style="color:orange; font-weight: bold;">In process </td>
+                {%endif%}
+            </tr>
+            <tr>
+                <th>{{headings[15]}}</th>
+                {%if s['admin_status']==2 %}
+                <td style="color: green; font-weight: bold;">Finalisation is done</td>
+                {% else %}
+                <td style="color:orange; font-weight: bold;">Yet to be finalised </td>
+                {%endif%}
+            </tr>
+            <tr>
+                <th>FINAL AMOUNT :</th>
+                <td style="color: indianred; font-size: medium;font-weight: bold; ">₹ {{s['final_amount']}}</td>
+            </tr>
         </table>
-
-        <div class="button">
-            <button type="submit" name="ServiceCompletedButton" value="ServiceCompleted" class="request">Service
-                Completed</button>
-        </div>
-
-        </form>
-
+            {%endfor%}
+        
+        
     </div>
 </body>
 

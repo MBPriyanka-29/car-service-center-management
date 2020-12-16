@@ -77,6 +77,11 @@
             padding: 8px;
             background-color: #bedbbb;
         }
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
 
         form {
             margin-bottom: 0px;
@@ -163,8 +168,10 @@
         }
 
         .addMechanic {
-            background-color: #4CAF50;
+            background-color: #0278ae;
             color: white;
+            font-size: 18;
+            font-weight: bold;
             padding: 16px 20px;
             margin: 8px 0;
             border: none;
@@ -177,6 +184,7 @@
 
         .addMechanic:hover {
             opacity: 1;
+            background-color: #51adcf;
         }
 
         .success {
@@ -201,7 +209,7 @@
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
-            font-size: 50;
+            font-size: 45;
         }
     </style>
 </head>
@@ -213,12 +221,13 @@
 
     <div class="navbar">
         <a href="/dashboard_a" style="margin-left: 20;">Back to Dashboard</a>
-        <a style="margin-left: 1500;" href="/viewMechanics">View Mechanics</a>
+        <a style="margin-left: 1300;" href="/viewMechanics">View Mechanics</a>
     </div>
 
     <div class="mechanic_details" style="text-align: center;">
 
-        <h1 class="heading1" style="margin-top: 100px; margin-bottom: 100px;">Add Mechanic details</h1>
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Add Mechanic details</h1>
+        <hr>
 
         <form id="addMech" method="POST" action="">
 

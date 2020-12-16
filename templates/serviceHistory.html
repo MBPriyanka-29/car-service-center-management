@@ -50,7 +50,7 @@
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
-            font-size: 50;
+            font-size: 40;
         }
 
         .modify {
@@ -79,14 +79,25 @@
         #services tr:hover {
             background-color: #ddd;
         }
+        #services th:hover {
+            background-color: #686d76;
+        }
+      
 
         #services th {
-            padding-top: 12px;
-            padding-bottom: 12px;
+            padding-top: 20px;
+            padding-bottom: 20px;
             text-align: center;
-            background-color: #595b83;
+            background-color: #384259;
             color: white;
         }
+
+        
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
     </style>
 </head>
 
@@ -99,14 +110,14 @@
     <div class="navbar">
         <a href="/">Logout</a>
         <a href="/dashboard_c"> Back to Dashboard</a>
-        <a style="margin-left: 1400;" href="/selectStation"> select Station</a>
+        <a style="margin-left: 1300;" href="/selectStation"> select Station</a>
 
     </div>
 
     <div class="modify">
-        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">View Service History</h1>
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Your Service History</h1>
 
-
+        <hr>
 
         <table id="services" style="width:90%; text-align: center; margin-left:auto;margin-right:auto;">
             <tr>
@@ -123,17 +134,17 @@
                 <td>{{cs['s_name']}}</td>
                 <td>{{cs['service_request_date']}}</td>
                 {%if cs['s_status']==2 %}
-                <td style="color: green;">request accepted</td>
+                <td style="color: green; font-weight: bold; ">Request accepted</td>
                 {% elif cs['s_status']==1 %}
-                <td style="color:red;">request Cancelled</td>
+                <td style="color:red; font-weight: bold; ">Request Cancelled</td>
                 {% else %}
-                <td style="color:orange;">Wait for admin approval </td>
+                <td style="color:orange; font-weight: bold; ">Wait for admin approval </td>
                 {%endif%}
         
                     {%if cs['admin_status']==2 %}
-                    <td style="color: green;">Finalisation is done</td>
+                    <td style="color: green; font-weight: bold; ">Finalisation is done</td>
                     {% else %}
-                    <td style="color:orange;">Yet to be finalised </td>
+                    <td style="color:orange; font-weight: bold; ">Yet to be finalised </td>
                     {%endif%}
         
                 <td><a href="/serviceHistory?view={{cs['service_id']}}">View details</a></td>
