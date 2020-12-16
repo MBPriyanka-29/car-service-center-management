@@ -82,7 +82,7 @@ s_num bigint(10),
 primary key(station_id),
 foreign key(admin_id) references admin(admin_id) on delete cascade on update cascade
 );
-alter table service AUTO_INCREMENT=500;
+
 #alter table service_station add column s_num bigint(10);
 
 #------------------------------ MECHANIC ---------------
@@ -122,11 +122,19 @@ admin_status int default 0,
 s_status int default 0,
 customer_id bigint,
 service_request_date datetime,
+bill_date datetime,
+service_amount float default 0,
+additional_parts float default 0,
+other_amount float default 0,
+tax float default 0,
+discount float default 0,
+final_amount float default 0,
 admin_id bigint,
 primary key(service_id),
 foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade,
 foreign key(admin_id) references admin(admin_id) on delete cascade on update cascade
 );
+#drop table service;
 #alter table service add column admin_id bigint;
 #ALTER TABLE service
 #ADD FOREIGN KEY (admin_id) REFERENCES admin(admin_id);
@@ -138,17 +146,20 @@ alter table service AUTO_INCREMENT=100;
 #------------------------------ BILL ---------------
 create table bill(
 bill_id bigint AUTO_INCREMENT,
-bill_date date,
-bill_time time,
-service_amount float NOT NULL,
-additional_parts float,
-other_amount float,
-tax float,
-discount float,
-final_amount float NOT NULL,
-status bool,
-primary key(bill_id)
+bill_date datetime,
+service_amount float default 0,
+additional_parts float default 0,
+other_amount float default 0,
+tax float default 0,
+discount float default 0,
+final_amount float default 0,
+#status bool,
+customer_id bigint,
+primary key(bill_id),
+foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade
+
 );
+#drop table bill;
 alter table bill AUTO_INCREMENT=21000;
 #------------------------------ CAR ---------------
 create table car(
@@ -164,6 +175,7 @@ primary key(Registration_num,customer_id),
 foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade,
 foreign key(mechanic_id) references mechanic(mechanic_id) on delete cascade on update cascade
 );
+#drop table bill;
 #drop table car;
 #alter table car AUTO_INCREMENT=10000000;
 #alter table car add column Registration_num varchar(50);
@@ -208,8 +220,10 @@ customer_id bigint,
 service_id bigint,
 admin_id bigint,
 bill_id bigint,
-primary key(bill_id),
+primary key(customer_id,service_id,admin_id),
 foreign key(service_id) references service(service_id) on delete cascade on update cascade,
 foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade,
-foreign key(admin_id) references admin(admin_id) on delete cascade on update cascade
+foreign key(admin_id) references admin(admin_id) on delete cascade on update cascade,
+foreign key(bill_id) references bill(bill_id) on delete cascade on update cascade
 );
+#drop table pays;

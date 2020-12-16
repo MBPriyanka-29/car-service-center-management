@@ -161,7 +161,7 @@
         .station {
             background-color: #4CAF50;
             color: white;
-            font-size: 16;
+            font-size: 20;
             padding: 16px 20px;
             margin: 8px 0;
             border: none;
@@ -199,7 +199,7 @@
                 <th>DISTRICT</th>
                 <th>ADDRESS</th>
                 <th>PINCODE</th>
-                <th>STATION ID</th>
+            
              
             </tr>
             {%for s in stations %}
@@ -208,7 +208,7 @@
                 <td>{{s['district']}}</td>
                 <td>{{s['first_address']}}</td>
                 <td>{{s['pincode']}}</td>
-                <td>{{s['station_id']}}</td>
+          
             </tr>
             {%endfor%}
         </table>

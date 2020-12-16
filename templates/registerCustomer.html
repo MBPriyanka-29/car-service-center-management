@@ -8,19 +8,18 @@
 
     <title>Customer registration</title>
     <style>
-        .i1
-        {
+        .i1 {
             margin: 20px;
         }
-        .navbar 
-        {
+
+        .navbar {
             overflow: hidden;
             background-color: #333;
             font-family: Arial;
             margin-bottom: 50px;
         }
-        .navbar a 
-        {
+
+        .navbar a {
             float: left;
             font-size: 25px;
             color: white;
@@ -28,10 +27,12 @@
             padding: 14px 16px;
             text-decoration: none;
         }
-        .navbar a:hover, .dropdown:hover .dropbtn 
-        {
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
             background-color: red;
         }
+
         form {
             margin-bottom: 0px;
         }
@@ -89,10 +90,27 @@
             outline: none;
         }
 
+        select {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            font-size: 20px;
+        }
+
+        select:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
         .l1 {
             width: 300px;
             position: static;
             display: inline-block;
+            margin-right: 30;
         }
 
         /* Overwrite default styles of hr */
@@ -107,6 +125,7 @@
             color: white;
             padding: 16px 20px;
             margin: 8px 0;
+            font-size: 20;
             border: none;
             cursor: pointer;
             width: 10%;
@@ -129,6 +148,7 @@
             padding: 20px;
             margin: 0px;
         }
+
         .success {
             padding: 12px;
             border-radius: 3px;
@@ -146,19 +166,18 @@
             background-color: #ce6262;
             color: black;
         }
-        
+
         .heading1 {
-            color:  black;
+            color: black;
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
             font-size: 50;
         }
+    </style>
+</head>
 
-        </style>
-        </head>
-
-    <body>
+<body>
 
     {% for category, message in get_flashed_messages(with_categories=True) %}
     <div class={{category}}>{{ message }}</div>
@@ -167,7 +186,7 @@
         <a href="/" style="margin-left: 20;">Back to Dashboard</a>
         <a href="/login" style="margin-left: 1600;">LogIn</a>
     </div>
-    
+
     <form id="cus" method="POST" action="">
 
         <div class="customer_details">
@@ -183,54 +202,48 @@
             <label class="l1" for="c_lname">Last Name : </label>
             <input type="text" name="c_lname"><br>
 
-            <label class="l1" for="dateOfBirth">Date of birth :</label>
-            <input type="date" name="dateOfBirth"><br>
-
             <label class="l1" for="first_address">First Address :</label>
             <textarea form="cus" name="first_address" id="first_address" cols="30" rows="10"></textarea><br>
 
             <label class="l1" for="district">District :</label>
-        <select class="l1" name="district" id="district">
-            <option value="Bagalkot">Bagalkot</option>
-            <option value="Ballari">Ballari</option>
-            <option value="Bengaluru_Rural">Bengaluru Rural</option>
-            <option value="Bengaluru_Urban">Bengaluru Urban</option>
-            <option value="Bidar">Bidar</option>
-            <option value="Chamarajanagar">Chamarajanagar</option>
-            <option value="Chikballapur">Chikballapur</option>    
-            <option value="Chikkamagaluru">Chikkamagaluru</option>    
-            <option value="Chitradurga">Chitradurga</option>    
-            <option value="Dakshina_Kannada">Dakshina Kannada</option>    
-            <option value="Davangere">Davangere</option>               
-            <option value="Dharwad">Dharwad</option>    
-            <option value="Gadag">Gadag</option>    
-            <option value="Hassan">Hassan</option>    
-            <option value="Haveri">Haveri</option>    
-            <option value="Gulbarga">Gulbarga</option>    
-            <option value="Kodagu">Kodagu</option> 
-            <option value="Kolar">Kolar</option>       
-            <option value="Kodagu">Kodagu</option>    
-            <option value="Koppal">Koppal</option>    
-            <option value="Mandya">Mandya</option>    
-            <option value="Mysuru">Mysuru</option> 
-            <option value="Raichur">Raichur</option> 
-            <option value="Ramanagara">Ramanagara</option>    
-            <option value="Shivamogga">Shivamogga</option>
-            <option value="Tumkur">Tumkur</option>
-            <option value="Udupi">Udupi</option>
-            <option value="Uttara_Kannada">Uttara Kannada</option>
-            <option value="Vijayapura">Vijayapura</option>
-            <option value="Yadgir">Yadgir</option>
-        </select> <br><br>
+            <select class="l1" name="district" id="district">
+                <option value="Bagalkot">Bagalkot</option>
+                <option value="Ballari">Ballari</option>
+                <option value="Bengaluru_Rural">Bengaluru Rural</option>
+                <option value="Bengaluru_Urban">Bengaluru Urban</option>
+                <option value="Bidar">Bidar</option>
+                <option value="Chamarajanagar">Chamarajanagar</option>
+                <option value="Chikballapur">Chikballapur</option>
+                <option value="Chikkamagaluru">Chikkamagaluru</option>
+                <option value="Chitradurga">Chitradurga</option>
+                <option value="Dakshina_Kannada">Dakshina Kannada</option>
+                <option value="Davangere">Davangere</option>
+                <option value="Dharwad">Dharwad</option>
+                <option value="Gadag">Gadag</option>
+                <option value="Hassan">Hassan</option>
+                <option value="Haveri">Haveri</option>
+                <option value="Gulbarga">Gulbarga</option>
+                <option value="Kodagu">Kodagu</option>
+                <option value="Kolar">Kolar</option>
+                <option value="Kodagu">Kodagu</option>
+                <option value="Koppal">Koppal</option>
+                <option value="Mandya">Mandya</option>
+                <option value="Mysuru">Mysuru</option>
+                <option value="Raichur">Raichur</option>
+                <option value="Ramanagara">Ramanagara</option>
+                <option value="Shivamogga">Shivamogga</option>
+                <option value="Tumkur">Tumkur</option>
+                <option value="Udupi">Udupi</option>
+                <option value="Uttara_Kannada">Uttara Kannada</option>
+                <option value="Vijayapura">Vijayapura</option>
+                <option value="Yadgir">Yadgir</option>
+            </select> <br><br>
 
             <label class="l1" for="pincode">Pincode :</label>
             <input type="text" name="pincode"><br>
 
             <label class="l1" for="email">Email address :</label>
             <input type="email" name="email"><br>
-            
-            <label class="l1" for="dl_num">DL Number :</label>
-            <input type="text" name="dl_num"> <br>
 
             <label class="l1" for="phone_num">Phone Number :</label>
             <input type="text" name="phone_num">
@@ -241,11 +254,10 @@
             <label class="l1" for="re_enter_password">RENTER PASSWORD :</label>
             <input type="password" name="re_enter_password"><br>
             <br>
-            <button type="submit" name="submit_button" value="submit_registration"
-                class="registerbtn">Register</button>
+            <button type="submit" name="submit_button" value="submit_registration" class="registerbtn">Register</button>
         </div>
     </form>
-    
+
 </body>
 
 <html lang="en">

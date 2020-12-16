@@ -22,6 +22,39 @@
         .dropdown:hover .dropbtn {
             background-color: red;
         }
+        textarea {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        textarea:focus {
+            background-color:#dce6f7;
+            outline: none;
+        }
+
+        input[type=text]
+      {
+            width: 350px;
+            padding: 15px;
+            margin-left: 60px;
+            height: 40px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus
+        {
+            background-color:#dce6f7;
+            outline: none;
+        }
+
 
         body {
             margin: 0;
@@ -102,7 +135,7 @@
         .request {
             background-color: #4CAF50;
             color: white;
-            font-size: 16;
+            font-size: 20;
             padding: 16px 20px;
             margin: 8px 0;
             border: none;
@@ -150,12 +183,13 @@
     <div class="navbar">
         <a href="/">Logout</a>
         <a href="/dashboard_a"> Back to Dashboard</a>
-        <a style="margin-left: 1300;" href="/pending"> Pending requests</a>
+        <a style="margin-left: 1300;" href="/new"> View Pending service Requests</a>
 
     </div>
 
     <div class="modify">
-        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 80px;">Finalise pending service requests</h1>
+        <h1 class="heading1" style="margin-top: 30px;">View NEW service requests</h1>
+        <h2 class="heading1" style="margin-top: 10px; margin-bottom: 20px; font-size: 30;">Update the amount</h2>
         <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 100;">
 
             {%for s in indiservice %}
@@ -184,6 +218,7 @@
                 <td>{{s['Registration_num']}}</td>
 
             </tr>
+
             <tr>
                 <th>{{headings[5]}}</th>
                 <td>{{s['s_name']}}</td>
@@ -198,6 +233,7 @@
                 <th>{{headings[7]}}</th>
                 <td>{{s['s_time']}}</td>
             </tr>
+
             <tr>
                 <th>{{headings[8]}}</th>
                 <td>{{s['Specifications']}}</td>
@@ -215,22 +251,59 @@
                 <th>{{headings[11]}}</th>
                 <td>{{s['pincode']}}</td>
             </tr>
+            <tr>
+                <th>Admin Remark</th>
+                <td>{{s['admin_remark']}}</td>
+            </tr>
             
-            <form method="POST">
+            <form id="pending" method="POST">
                 <tr>
-                    <th>ENTER PRICE</th>
+                    <th>
+                        <label class="l1" for="admin_remark">Admin Remark : </label> 
+                    </th>
                     <td>
-                        <select style="width: 300;" class="l1" name="s_status" id="s_status">
-                            <option value="selected">Selected</option>
-                            <option value="rejected">Rejected</option>
+                        <textarea form="pending" name="admin_remark" id="admin_remark" cols="20" rows="10"></textarea><br>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label class="l1" for="service_amount">Service amount : </label> 
+                    </th>
+                    <td>
+                        <input type="text" name="service_amount"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label class="l1" for="additional_parts">Additional parts Amount: </label> 
+                    </th>
+                    <td>
+                        <input type="text" name="additional_parts"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label class="l1" for="other_amount">Other amount (if any): </label> 
+                    </th>
+                    <td>
+                        <input type="text" name="other_amount"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <th>FINALISATION STATUS</th>
+                    <td>
+                        <select style="width: 300;" class="l1" name="admin_status" id="admin_status">
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
                     </td>
 
                 </tr> <br> <br>
+                
                 {%endfor%}
         </table>
 
         <div class="button">
-            <button type="submit" name="ServiceCompletedButton" value="ServiceCompleted" class="request">Service
+            <button type="submit" name="ServiceCompletedButton" value="ServiceCompleted" class="request">
                 Completed</button>
         </div>
 

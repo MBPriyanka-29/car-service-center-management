@@ -39,12 +39,10 @@ def register_customer():
         customer_id = registerC['customer_id']
         c_fname = registerC['c_fname']
         c_lname = registerC['c_lname']
-        dateOfBirth = registerC['dateOfBirth']
         first_address = registerC['first_address']
         district = registerC['district']
         pincode = registerC['pincode']
         emailID = registerC['email']
-        dl_num = registerC['dl_num']
         phone_num = registerC['phone_num']
         pswd = registerC['pswd']
         re_enter_password = registerC['re_enter_password']
@@ -52,31 +50,29 @@ def register_customer():
         cur = mysql.connection.cursor()
 
         if request.form['submit_button'] == 'submit_registration':
-            if customer_id and c_fname and c_lname and first_address and district and pincode and emailID and dl_num and phone_num and pswd and re_enter_password:
+            if customer_id and c_fname and c_lname and first_address and district and pincode and emailID and phone_num and pswd and re_enter_password:
                 if len(customer_id) == 12:
                     if len(pincode) == 6:
-                        if len(dl_num) == 16:
-                            if len(phone_num) == 10:
-                                if pswd == re_enter_password:
-                                    cur.execute("insert into customer(customer_id,c_fname,c_lname,dateOfBirth,first_address,district,pincode,dl_num,phone_num,emailID) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                                (customer_id, c_fname, c_lname, dateOfBirth, first_address, district, pincode, dl_num, phone_num, emailID))
-                                    cur.execute(
-                                        "insert into login_customer values(%s,%s,%s)", (customer_id, emailID, pswd))
-                                    mysql.connection.commit()
-                                    cur.close()
-                                    flash(
-                                        "You have registered as a customer successfully!", 'success')
-                                    return redirect('/login')
-
-                                elif pswd != re_enter_password:
-                                    flash(
-                                        "Password doesn't match, Please re-enter the same password!", 'error')
-                                    redirect('/registerCustomer')
-                            else:
+                        if len(phone_num) == 10:
+                            if pswd == re_enter_password:
+                                cur.execute("insert into customer(customer_id,c_fname,c_lname,first_address,district,pincode,phone_num,emailID) values(%s,%s,%s,%s,%s,%s,%s,%s)",
+                                            (customer_id, c_fname, c_lname, first_address, district, pincode, phone_num, emailID))
+                                cur.execute(
+                                    "insert into login_customer values(%s,%s,%s)", (customer_id, emailID, pswd))
+                                mysql.connection.commit()
+                                cur.close()
                                 flash(
-                                    "Phone number is invalid, Try again!", 'error')
+                                    "You have registered as a customer successfully!", 'success')
+                                return redirect('/login')
+
+                            elif pswd != re_enter_password:
+                                flash(
+                                    "Password doesn't match, Please re-enter the same password!", 'error')
+                                redirect('/registerCustomer')
                         else:
-                            flash("DL number is invalid, Try again!", 'error')
+                            flash(
+                                "Phone number is invalid, Try again!", 'error')
+    
                     else:
                         flash("Pincode is invalid, Try again!", 'error')
                 else:
@@ -241,6 +237,7 @@ def forgotpassword():
 @app.route('/dashboard_a', methods=['GET', 'POST'])
 def dashboard_a():
     a_name=session['a_name']
+    print(a_name)
     return render_template('dashboard_a.html',a_name=a_name)
 
 @app.route('/addMechanics', methods=['GET', 'POST'])
@@ -346,7 +343,23 @@ def serviceRequest(admin):
             # print(sid['service_id'])
             cur.execute("insert into car_claims_service(service_id,Registration_num,customer_id) values(%s,%s,%s)",
                         (sid['service_id'], Registration_num, cid))
+
             mysql.connection.commit()
+            '''
+            a=cur.execute("insert into bill(bill_date,customer_id) values(%s,%s)",(formatted_date,cid))
+            print("date and cid in bill done!")
+            if a>0:
+                flash("Bill table entered!"'success')
+                mysql.connection.commit()
+                b=cur.fetchone()
+               # bill_id=b['bill_id']
+               # print("bill_id")
+                cur.execute("insert into pays(customer_id,service_id,admin_id,bill_id) values(%s,%s,%s,%s)",(cid,sid['service_id'],admin,bill_id))
+                mysql.connection.commit()
+            else:
+                flash("bill table not entered!",'error')
+            '''
+
             cur.close()
             flash(
                 'Service requested successfully!You chose to pick up car from your location.', 'success')
@@ -420,7 +433,7 @@ def new():
         indiservice = curso.fetchall()
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE','REQUEST FINALISATION']
-
+        
         if request.method == "POST":
             print("in post")
             service = request.form
@@ -494,7 +507,7 @@ def pending():
     cur1 = mysql.connection.cursor()
     aid = session['aid']
     result_cs = cur1.execute(
-        "select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.s_status=2 and admin_id = %s",(aid,))
+        "select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.s_status=2 and service.admin_status=0 and admin_id = %s",(aid,))
     if((result_cs > 0)):
         car_service = cur1.fetchall()
         # print(car_service)
@@ -509,27 +522,34 @@ def pending():
         indiservice = curso.fetchall()
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE']
-
+        now = datetime.now()
+        formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+       # curso.execute("UPDATE bill,pays SET bill.bill_date=%s where bill.bill_id = pays.bill_id and  pays.admin_id=%s and pays.service_id=%s",(formatted_date,aid,indiservice[0]['service_id']))
+        #mysql.connection.commit()
+        #curso.execute("select * from pays,bill where bill.bill_id=pays.bill_id and pays.admin_id=%s and pays.service_id=%s",(aid,indiservice[0]['service_id']))
+        #bill=curso.fetchall()
+        
         if request.method == "POST":
-            print("in post")
             service = request.form
-            s_status = service['s_status']
-            print("s_status: ", s_status)
+            service_amount=service['service_amount']
+            admin_remark=service['admin_remark']
+            additional_parts=service['additional_parts']
+            other_amount=service['other_amount']
+            admin_status = service['admin_status']
             buttonvalue = service['ServiceCompletedButton']
             if buttonvalue == "ServiceCompleted":
-                print("Button clicked")
-                if s_status == "selected":
+                if admin_status == "completed":
                     status = 2
+                    cur = mysql.connection.cursor()
+                    cur.execute("UPDATE service SET admin_remark=%s,admin_status=%s,service_amount=%s,additional_parts=%s,other_amount=%s,bill_date=%s WHERE service_id=%s", (admin_remark,status,service_amount,additional_parts,other_amount,formatted_date,service_id))
+                    mysql.connection.commit()
+                    cur.close()
+                    flash("request finalised successfuly!", 'success')
+                    return redirect('/pending')
                 else:
                     status = 1
-                print("status", status)
-                cur = mysql.connection.cursor()
-                cur.execute(
-                    "UPDATE service SET s_status=%s WHERE service_id=%s", (status, service_id))
-                mysql.connection.commit()
-                cur.close()
-                flash("request finalised successfuly!", 'success')
-                return redirect('/new')
+                flash("request not finalised!", 'error')
+                return redirect('/pending')
         return render_template('viewPending.html', indiservice=indiservice, headings=headings)
     return render_template('pending.html', car_service=car_service)
 

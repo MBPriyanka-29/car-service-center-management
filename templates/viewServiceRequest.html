@@ -184,7 +184,19 @@
             </tr>
             <tr>
                 <th>{{headings[13]}}</th>
-                <td>{{s['admin_remark_date']}}</td>
+                <td>{{s['bill_date']}}</td>
+            </tr>
+            <tr>
+                <th>SERVICE AMOUNT :</th>
+                <td>{{s['service_amount']}}</td>
+            </tr>
+            <tr>
+                <th>ADDITIONAL PARTS AMOUNT:</th>
+                <td>{{s['additional_parts']}}</td>
+            </tr>
+            <tr>
+                <th>OTHER AMOUNT :</th>
+                <td>{{s['other_amount']}}</td>
             </tr>
             
             <tr>
@@ -200,7 +212,7 @@
             </tr>
             <tr>
                 <th>{{headings[15]}}</th>
-                {%if s['admin_status']==1 %}
+                {%if s['admin_status']==2 %}
                 <td style="color: green;">Finalisation is done</td>
                 {% else %}
                 <td style="color:orange;">Yet to be finalised </td>
