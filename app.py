@@ -543,6 +543,13 @@ def pending():
                     cur = mysql.connection.cursor()
                     cur.execute("UPDATE service SET admin_remark=%s,admin_status=%s,service_amount=%s,additional_parts=%s,other_amount=%s,bill_date=%s WHERE service_id=%s", (admin_remark,status,service_amount,additional_parts,other_amount,formatted_date,service_id))
                     mysql.connection.commit()
+                    cur.execute("SELECT SUM(service_amount+additional_parts+other_amount) from service WHERE service_id=%s",(service_id,))
+                    total=cur.fetchone()
+                    
+                    final_amount=total['SUM(service_amount+additional_parts+other_amount)']
+                    print("final_amount {}".format(final_amount))
+                    cur.execute("UPDATE service SET final_amount=%s WHERE service_id=%s", (final_amount,service_id))
+                    mysql.connection.commit()
                     cur.close()
                     flash("request finalised successfuly!", 'success')
                     return redirect('/pending')

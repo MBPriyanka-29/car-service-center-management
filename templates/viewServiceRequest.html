@@ -95,6 +95,24 @@
             color: white;
             width: 30%;
         }
+        .printbtn {
+            background-color: #5696fc;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            font-size: 20;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+
+            opacity: 0.9;
+
+            margin-bottom: 40px;
+        }
+
+        .printbtn:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -198,6 +216,7 @@
                 <th>OTHER AMOUNT :</th>
                 <td>{{s['other_amount']}}</td>
             </tr>
+          
             
             <tr>
                 <th>{{headings[14]}}</th>
@@ -218,9 +237,16 @@
                 <td style="color:orange;">Yet to be finalised </td>
                 {%endif%}
             </tr>
+            <tr>
+                <th>FINAL AMOUNT :</th>
+                <td style="color: indianred; font-size: medium;">{{s['final_amount']}}</td>
+            </tr>
+
+           
 
             {%endfor%}
         </table>
+        <button class="printbtn" onclick="window.print()">Print this page</button>
     </div>
 </body>
 
