@@ -105,13 +105,60 @@
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
-            font-size: 40;
+            font-size: 50;
         }
+
         hr {
             border: 1px solid #f1f1f1;
             margin-bottom: 25px;
         }
+        .button {
+            background-color: #0278ae;
+            color: white;
+            font-weight: bolder;
+            font-size: 30;
+            padding: 50px 0px 165px 0px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 500;
+            height: 150;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 15px 50px 30px;
+            margin: 30 30 30 30;
+            position: relative;
+            bottom: 20px;
+            right: 20px;
+            margin-left: 250;
+            text-align: center;
+        }
 
+        .button:hover {
+            background-color: #51adcf;
+            opacity: 1;
+        }
+
+        .count {
+            color: black;
+            text-shadow: 6px 6px 10px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            background: white;
+            margin-left: auto;
+            margin-right: auto;
+            width: 30px;
+            height: 20px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 3.5px 14px;
+            font-size: large;
+        }
+        .name{
+            color: white;
+            text-shadow: 6px 6px 10px black;
+            font-family: 'Gochi Hand', cursive;
+        }
     </style>
 </head>
 
@@ -124,27 +171,60 @@
         <a href="/">Logout</a>
         <a style="margin-left: 1300;" href="/selectStation">Select Station</a>
         <a href="/serviceHistory">service history</a>
-           <!--
-        <div class="dropdown">
-            <button class="dropbtn">Request service
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content">
-                    <a href="/serviceRequest">Service request form</a>
-                    <form method="POST">
-                    <button class="dropbtn" style="background-color: white;color: black;" name="requestButton"
-                        value="request">
-                        Service request form
-                    </button>
-                </form>
-                <a href="/serviceHistory">service history</a>
-            </div>
-        </div>
-          -->
     </div>
     <div style="text-align: center;">
         <h3 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Welcome {{c_name}} !</h3>
         <hr>
+        <form method="POST">
+            <table>
+                <tr>
+                    <td>
+                        <button id="buttons" class="button" name="button" value="requested">
+                            <div class="name"> Requested services
+                            </div><br>
+                            <span class="count">{{count[0]}}</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button id="buttons" class="button" name="button" value="requested">
+                            <div class="name"> Completed services
+                            </div><br>
+                            <span class="count">{{count[1]}}</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="buttons" class="button" name="button" value="requested">
+                            <div class="name"> Waiting for approval
+                            </div><br>
+                            <span class="count">{{count[2]}}</span>
+                        </button>
+
+                    </td>
+                    <td>
+                        <button id="buttons" class="button" name="button" value="requested">
+                            <div class="name"> Waiting for bill
+                            </div><br>
+                            <span class="count">{{count[3]}}</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="buttons" class="button" name="button" value="requested">
+                            <div class="name"> Rejected services
+                            </div><br>
+                            <span class="count">{{count[4]}}</span>
+                        </button>
+                    </td>
+
+                </tr>
+            </table>
+
+
+        </form>
+
     </div>
 </body>
 

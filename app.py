@@ -237,8 +237,65 @@ def forgotpassword():
 @app.route('/dashboard_a', methods=['GET', 'POST'])
 def dashboard_a():
     a_name=session['a_name']
-    print(a_name)
-    return render_template('dashboard_a.html',a_name=a_name)
+    aid=session['aid']
+    counts=[]
+    cur = mysql.connection.cursor()
+    print(aid)
+    
+    # total requests recieved
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    counts.append(count)
+
+    # new service requests
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s and service.s_status=0 and service.admin_status=0",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    counts.append(count)
+
+    
+    # rejected requests
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s and service.s_status=1 and service.admin_status=0",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    print(count)
+    counts.append(count)
+
+    # approved requests
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s and service.s_status=2 and service.admin_status=0",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    print(count)
+    counts.append(count)
+
+    # pending (waiting for finalisation)
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s and service.s_status=2 and service.admin_status=0",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    print(count)
+    counts.append(count)
+
+    # completed 
+    result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s and service.s_status=2 and service.admin_status=2",(aid,))
+    n=cur.fetchone()
+    count=n['count(service.admin_id)']
+    print(count)
+    counts.append(count)
+    
+    if request.method=="POST":
+        bt=request.form
+        buttonvalue=bt['button']
+
+        if buttonvalue=="new":
+            return redirect(url_for('new'))
+        elif buttonvalue=="rejected":
+            return redirect(url_for('rejected'))
+        elif buttonvalue=="pending":
+            return redirect(url_for('pending'))
+        elif buttonvalue=="completed":
+            return redirect(url_for('completed'))
+    return render_template('dashboard_a.html',a_name=a_name,count=counts)
 
 @app.route('/addMechanics', methods=['GET', 'POST'])
 def addMechanics():
@@ -281,8 +338,82 @@ def viewMechanics():
 
 @app.route('/dashboard_c', methods=['GET', 'POST'])
 def dashboard_c():
+    cid=session['cid']
     c_name=session['c_name']
-    return render_template('dashboard_c.html',c_name=c_name)
+    counts=[]
+    cur = mysql.connection.cursor()
+    
+    # requested
+    result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s",(cid,))
+    n=cur.fetchone()
+    count=n['count(car.customer_id)']
+    counts.append(count)
+    
+    # completed
+    result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=2",(cid,))
+    n=cur.fetchone()
+    count=n['count(car.customer_id)']
+    print(count)
+    counts.append(count)
+
+    #waiting for approval
+    result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=0",(cid,))
+    n=cur.fetchone()
+    count=n['count(car.customer_id)']
+    print(count)
+    counts.append(count)
+
+    #waiting bill
+    result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=0 and service.s_status=2",(cid,))
+    n=cur.fetchone()
+    count=n['count(car.customer_id)']
+    print(count)
+    counts.append(count)
+
+    #rejected
+    result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=1",(cid,))
+    n=cur.fetchone()
+    count=n['count(car.customer_id)']
+    print(count)
+    counts.append(count)
+    print(counts)
+    
+    if request.method=="POST":
+      #  bt=request.form
+      #  buttonvalue=bt['button']
+        return redirect(url_for('serviceHistory'))
+        '''
+        if buttonvalue=='requested':
+            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s",(cid,))
+            n=cur.fetchone()
+   
+            count=n['count(car.customer_id)']
+            return redirect(url_for('serviceHistory'))
+        elif buttonvalue=='completed':
+            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=2",(cid,))
+            n=cur.fetchone()
+            count=n['count(car.customer_id)']
+            return redirect(url_for('serviceHistory'))
+
+        elif buttonvalue=='waitingApproval':
+            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=0",(cid,))
+            n=cur.fetchone()
+            count=n['count(car.customer_id)']
+            return redirect(url_for('serviceHistory'))
+
+        elif buttonvalue=='waitingBill':
+            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=0 and service.s_status=2",(cid,))
+            n=cur.fetchone()
+            count=n['count(car.customer_id)']
+            return redirect(url_for('serviceHistory'))
+        elif buttonvalue=='rejected':
+            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=1",(cid,))
+            n=cur.fetchone()
+            count=n['count(car.customer_id)']
+            return redirect(url_for('serviceHistory'))
+        '''
+        cur.close()
+    return render_template('dashboard_c.html',c_name=c_name,count=counts)
 
 @app.route('/selectStation', methods=['GET', 'POST'])
 def selectStation():

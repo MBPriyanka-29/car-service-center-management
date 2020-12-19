@@ -1,8 +1,9 @@
 <html>
-    <head>
-        <title>Admin Dashboard</title>
-        <style>
-            .navbar {
+
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        .navbar {
             overflow: hidden;
             background-color: #333;
             font-family: Arial;
@@ -31,7 +32,7 @@
             background-color: inherit;
             font-family: inherit;
             margin: 0;
-           
+
         }
 
         .navbar a:hover,
@@ -46,7 +47,7 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
-         
+
         }
 
         .dropdown-content a {
@@ -66,92 +67,199 @@
             display: block;
         }
 
-            body{
-                margin: 0;
-            }
-            
-            .success {
-                padding: 12px;
-                border-radius: 3px;
-                font-size: 1.2rem;
-                margin-bottom: 16px;
-                color: black;
-                background-color: #bedbbb;
-            }
+        body {
+            margin: 0;
+        }
 
-            .error {
-                padding: 12px;
-                border-radius: 3px;
-                font-size: 1.2rem;
-                margin-bottom: 16px;
-                background-color: #ce6262;
-                color: black;
-            }
-            .heading1 {
+        .success {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: black;
+            background-color: #bedbbb;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            background-color: #ce6262;
+            color: black;
+        }
+
+        .heading1 {
             color: black;
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
             font-size: 40;
         }
+
         hr {
             border: 1px solid #f1f1f1;
             margin-bottom: 25px;
         }
 
-        </style>
-        </head>
+        .button {
+            background-color: #0278ae;
+            color: white;
+            font-weight: bolder;
+            font-size: 30;
+            padding: 50px 0px 165px 0px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 500;
+            height: 150;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            border-radius: 15px 50px 30px;
+            margin: 30 30 30 30;
+            position: relative;
+            bottom: 20px;
+            right: 20px;
+            margin-left: 250;
+            text-align: center;
+        }
 
-        <body>
+        .button:hover {
+            background-color: #51adcf;
+            opacity: 1;
+        }
 
-           {% for category, message in get_flashed_messages(with_categories=True) %}
+        .count {
+            color: black;
+            text-shadow: 6px 6px 10px gray;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: bold;
+            background: white;
+            margin-left: auto;
+            margin-right: auto;
+            width: 30px;
+            height: 20px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 3.5px 14px;
+            font-size: large;
+        }
+
+        .name {
+            color: white;
+            text-shadow: 6px 6px 10px black;
+            font-family: 'Gochi Hand', cursive;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for category, message in get_flashed_messages(with_categories=True) %}
     <div class={{category}}>{{ message }}</div>
     {% endfor %}
 
-        <div class="navbar">
-            <a  href="/">Logout</a>
-            
-            
-            <div  style="margin-left: 1150; margin-right: 10;" class="dropdown">
-                <button class="dropbtn">Mechanics
-                    <i class="fa fa-caret-down"></i>
-                </button>
-                
-                <div  class="dropdown-content">
-                    <a href="/addMechanics">Add Mechanics</a>
-                    <a href="/viewMechanics">View Mechanics</a>
-                </div>
+    <div class="navbar">
+        <a href="/">Logout</a>
+
+
+        <div style="margin-left: 1150; margin-right: 10;" class="dropdown">
+            <button class="dropbtn">Mechanics
+                <i class="fa fa-caret-down"></i>
+            </button>
+
+            <div class="dropdown-content">
+                <a href="/addMechanics">Add Mechanics</a>
+                <a href="/viewMechanics">View Mechanics</a>
             </div>
-
-           
-
-            <div  style="margin-right: 10;" class="dropdown">
-                <button class="dropbtn">Service Requests
-                    <i class="fa fa-caret-down"></i>
-                </button>
-                
-                <div  class="dropdown-content">
-                    <a href="/new">New</a>
-                    <a href="/rejected">Rejected</a>
-                </div>
-            </div>
-
-            <div style="margin-right: 10;"  class="dropdown">
-                <button  class="dropbtn">Servicing
-                    <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content">
-                    <a href="/pending">Pending</a>
-                    <a href="/completed">Completed</a>
-                </div>
-            </div>
-
         </div>
-        
-        <div style="text-align: center;">
 
-            <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Welcome {{a_name}} !</h1>
-            <hr>
+
+
+        <div style="margin-right: 10;" class="dropdown">
+            <button class="dropbtn">Service Requests
+                <i class="fa fa-caret-down"></i>
+            </button>
+
+            <div class="dropdown-content">
+                <a href="/new">New</a>
+                <a href="/rejected">Rejected</a>
+            </div>
         </div>
-    </body>
+
+        <div style="margin-right: 10;" class="dropdown">
+            <button class="dropbtn">Servicing
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="/pending">Pending</a>
+                <a href="/completed">Completed</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center;">
+
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Welcome {{a_name}} !</h1>
+        <hr>
+        <form method="POSt">
+        <table>
+            <tr>
+                <td>
+                    <button id="buttons" class="button" name="button" value="requested">
+                        <div class="name"> Total service requests recieved
+                        </div><br>
+                        <span class="count">{{count[0]}}</span>
+                    </button>
+                </td>
+                <td>
+                    <button id="buttons" class="button" name="button" value="new">
+                        <div class="name"> New service requests
+                        </div><br>
+                        <span class="count">{{count[1]}}</span>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="buttons" class="button" name="button" value="rejected">
+                        <div class="name"> Rejected requests
+                        </div><br>
+                        <span class="count">{{count[2]}}</span>
+                    </button>
+
+                </td>
+                <td>
+                    <button id="buttons" class="button" name="button" value="approved">
+                        <div class="name"> Approved requests
+                        </div><br>
+                        <span class="count">{{count[3]}}</span>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="buttons" class="button" name="button" value="pending">
+                        <div class="name"> Pending(waiting for finalisation)
+                        </div><br>
+                        <span class="count">{{count[4]}}</span>
+                    </button>
+                </td>
+                <td>
+                    <button id="buttons" class="button" name="button" value="completed">
+                        <div class="name">Completed services
+                        </div><br>
+                        <span class="count">{{count[5]}}</span>
+                    </button>
+                </td>
+
+            </tr>
+        </table>
+
+        </form>
+
+    </div>
+</body>
+
 </html>

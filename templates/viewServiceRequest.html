@@ -50,7 +50,7 @@
             text-shadow: 3px 3px 5px gray;
             font-family: 'Gochi Hand', cursive;
             font-weight: bold;
-            font-size: 50;
+            font-size: 45;
         }
 
         .modify {
@@ -83,18 +83,44 @@
             background-color: #ddd;
         }
         #services th:hover {
-            background-color: #8061c9;
+            background-color: #686d76;
         }
-
+        /*373a40 and 686d76 */
         #services th {
             padding-top: 20px;
             padding-bottom: 20px;
             text-align: center;
             font-size: 20;
-            background-color: #595b83;
+            background-color: #384259;
             color: white;
             width: 30%;
+        
         }
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+        .printbtn {
+            background-color: #0278ae;
+            color: white;
+            font-weight: bold;
+            padding: 16px 20px;
+            margin: 8px 0;
+            font-size: 20;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+
+            opacity: 0.9;
+
+            margin-bottom: 40px;
+        }
+
+        .printbtn:hover {
+            opacity: 1;
+            background-color: #51adcf;
+        }
+
     </style>
 </head>
 
@@ -107,14 +133,14 @@
     <div class="navbar">
         <a href="/">Logout</a>
         <a href="/dashboard_c"> Back to Dashboard</a>
-        <a style="margin-left: 1400;" href="/serviceHistory"> Service History</a>
+        <a style="margin-left: 1200;" href="/serviceHistory"> Service History</a>
 
     </div>
 
     <div class="modify">
-        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 80px;">View Service Request in detail</h1>
+        <h1 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">View Service Request in detail</h1>
 
-
+        <hr>
 
         <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 100;">
 
@@ -187,40 +213,42 @@
                 <td>{{s['bill_date']}}</td>
             </tr>
             <tr>
-                <th>SERVICE AMOUNT :</th>
+                <th>SERVICE AMOUNT </th>
                 <td>{{s['service_amount']}}</td>
             </tr>
             <tr>
-                <th>ADDITIONAL PARTS AMOUNT:</th>
+                <th>ADDITIONAL PARTS AMOUNT</th>
                 <td>{{s['additional_parts']}}</td>
             </tr>
             <tr>
-                <th>OTHER AMOUNT :</th>
+                <th>OTHER AMOUNT </th>
                 <td>{{s['other_amount']}}</td>
             </tr>
             
             <tr>
                 <th>{{headings[14]}}</th>
                 {%if s['s_status']==2 %}
-                <td style="color: green;">request accepted</td>
+                <td style="color: green; font-weight: bold">request accepted</td>
                 {% elif s['s_status']==1 %}
-                <td style="color:red;">request Cancelled</td>
+                <td style="color:red;font-weight: bold">request Cancelled</td>
 
                 {% else %}
-                <td style="color:orange;">In process </td>
+                <td style="color:orange;font-weight: bold">In process </td>
                 {%endif%}
             </tr>
             <tr>
                 <th>{{headings[15]}}</th>
                 {%if s['admin_status']==2 %}
-                <td style="color: green;">Finalisation is done</td>
+                <td style="color: green;font-weight: bold">Finalisation is done</td>
                 {% else %}
-                <td style="color:orange;">Yet to be finalised </td>
+                <td style="color:orange;font-weight: bold">Yet to be finalised </td>
                 {%endif%}
-            </tr>
-
-            {%endfor%}
+            </tr>         
         </table>
+        {%if s['admin_status']==2 %}
+        <button style="margin-bottom: 50;" class="printbtn" onclick="window.print()">Print this page</button>
+        {%endif%}
+        {%endfor%}
     </div>
 </body>
 
