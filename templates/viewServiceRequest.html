@@ -63,12 +63,13 @@
         #services {
             font-family: Arial, Helvetica, sans-serif;
             border-collapse: collapse;
-          width: 60%;
+            width: 60%;
         }
 
-        #services td{
+        #services td {
             width: 80%;
         }
+
         #services td,
         #services th {
             border: 1px solid #ddd;
@@ -82,9 +83,11 @@
         #services tr:hover {
             background-color: #ddd;
         }
+
         #services th:hover {
             background-color: #686d76;
         }
+
         /*373a40 and 686d76 */
         #services th {
             padding-top: 20px;
@@ -94,12 +97,54 @@
             background-color: #384259;
             color: white;
             width: 30%;
-        
+
         }
+
+        #cus {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 60%;
+        }
+
+        #cus td {
+            width: 80%;
+        }
+
+        #cus td,
+        #cus th {
+            border: 1px solid #ddd;
+            padding: 5px;
+          
+        }
+
+        #cus tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #cus tr:hover {
+            background-color: #ddd;
+        }
+
+        #cus th:hover {
+            background-color: #839b97;
+        }
+
+        /*373a40 and 686d76 */
+        #cus th {
+            padding-top: 14px;
+            padding-bottom: 14px;
+            text-align: center;
+            background-color: #34626c;
+            color: white;
+            font-size: 20;
+            width: 30%;
+        }
+
         hr {
             border: 1px solid #f1f1f1;
             margin-bottom: 25px;
         }
+
         .printbtn {
             background-color: #0278ae;
             color: white;
@@ -120,7 +165,6 @@
             opacity: 1;
             background-color: #51adcf;
         }
-
     </style>
 </head>
 
@@ -142,18 +186,28 @@
 
         <hr>
 
-        <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 100;">
+        <table id="services" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 20;">
 
-            {%for s in indiservice %}
             <tr>
                 <th>{{headings[0]}}</th>
                 <td>{{s['service_request_date']}}</td>
-
             </tr>
             <tr>
-                <th>{{headings[1]}}</th>
-                <td>{{s['car_name']}}</td>
-
+                <th >STATION NAME</th>
+                <td style="font-weight: bolder; text-transform: uppercase; text-shadow: 1px 1px 2px gray;
+                font-family: 'Gochi Hand', cursive;">{{station['service_station.s_name']}}</td>
+            </tr>
+            <tr>
+                <th>STATION ADDRESS</th>
+                <td>{{station['first_address']}},{{station['district']}},{{station['service_station.pincode']}}</td>
+            </tr>
+            <tr>
+                <th>STATION NUMBER</th>
+                <td>{{station['s_num']}}</td>
+            </tr>
+            <tr>
+                <th>{{headings[1]}} AND MODEL</th>
+                <td>{{s['car_name']}} {{s['model']}}</td>
             </tr>
             <tr>
                 <th>{{headings[2]}}</th>
@@ -161,20 +215,13 @@
 
             </tr>
             <tr>
-                <th>{{headings[3]}}</th>
-                <td>{{s['model']}}</td>
-
-            </tr>
-            <tr>
                 <th>{{headings[4]}}</th>
                 <td>{{s['Registration_num']}}</td>
 
             </tr>
-
-
             <tr>
                 <th>{{headings[5]}}</th>
-                <td>{{s['s_name']}}</td>
+                <td style="font-weight: bold; color:indigo ;">{{s['s_name']}}</td>
 
             </tr>
             <tr>
@@ -187,23 +234,28 @@
                 <td>{{s['s_time']}}</td>
             </tr>
 
+            {% if s['Specifications']!="NA" %}
             <tr>
                 <th>{{headings[8]}}</th>
                 <td>{{s['Specifications']}}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>{{headings[9]}}</th>
                 <td>{{s['delivery_type']}}</td>
             </tr>
 
+            {% if s['delivery_type']=="pickup" %}
+
             <tr>
                 <th>{{headings[10]}}</th>
-                <td>{{s['address']}}</td>
+                <td>{{s['address']}} </td>
             </tr>
             <tr>
                 <th>{{headings[11]}}</th>
                 <td>{{s['pincode']}}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>{{headings[12]}}</th>
                 <td>{{s['admin_remark']}}</td>
@@ -214,17 +266,17 @@
             </tr>
             <tr>
                 <th>SERVICE AMOUNT </th>
-                <td>{{s['service_amount']}}</td>
+                <td>₹ {{s['service_amount']}}</td>
             </tr>
             <tr>
                 <th>ADDITIONAL PARTS AMOUNT</th>
-                <td>{{s['additional_parts']}}</td>
+                <td>₹ {{s['additional_parts']}}</td>
             </tr>
             <tr>
                 <th>OTHER AMOUNT </th>
-                <td>{{s['other_amount']}}</td>
+                <td>₹ {{s['other_amount']}}</td>
             </tr>
-            
+
             <tr>
                 <th>{{headings[14]}}</th>
                 {%if s['s_status']==2 %}
@@ -243,12 +295,40 @@
                 {% else %}
                 <td style="color:orange;font-weight: bold">Yet to be finalised </td>
                 {%endif%}
-            </tr>         
+            </tr>
+            <tr>
+                <th>FINAL AMOUNT</th>
+                {%if s['admin_status']==2 %}
+                <td style="color: indianred;font-weight: bold">₹ {{s['final_amount']}}</td>
+               
+                {%endif%}
+            </tr>
+
         </table>
+
+        {%if s['s_status']==2 %}
+        <table id="cus" style=" text-align: center; margin-left:auto;margin-right:auto; margin-bottom: 20; margin-top: 0;">
+
+            <tr>
+                <th>MECHANIC NAME</th>
+                <td>{{mechanic['m_fname']}} {{mechanic['m_lname']}}</td>
+            </tr>
+            <tr>
+                <th>MECHANIC GENDER</th>
+                <td>{{mechanic['gender']}}</td>
+            </tr>
+            <tr>
+                <th>MECHANIC PHONE NUMBER</th>
+                <td>{{mechanic['phone_num']}}</td>
+            </tr>
+        </table>
+
+        {%endif%}
+
         {%if s['admin_status']==2 %}
         <button style="margin-bottom: 50;" class="printbtn" onclick="window.print()">Print this page</button>
         {%endif%}
-        {%endfor%}
+
     </div>
 </body>
 

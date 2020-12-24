@@ -29,11 +29,12 @@
             margin: 5px 0 22px 0;
             display: inline-block;
             border: none;
-            background: #f1f1f1;
+            font-size: 18;
+            background: #fbf6f0;
         }
 
         textarea:focus {
-            background-color:#dce6f7;
+            background-color:white;
             outline: none;
         }
 
@@ -46,12 +47,14 @@
             margin: 5px 0 22px 0;
             display: inline-block;
             border: none;
-            background: #f1f1f1;
+            background: #fbf6f0;
+            font-weight: bold;
+            font-size: 18;
         }
 
         input[type=text]:focus
         {
-            background-color:#dce6f7;
+            background-color:white;
             outline: none;
         }
 
@@ -97,11 +100,11 @@
         #services {
             font-family: Arial, Helvetica, sans-serif;
             border-collapse: collapse;
-            width: 60%;
+            width: 70%;
         }
 
         #services td {
-            width: 80%;
+            width: 85%;
         }
 
         #services td,
@@ -129,7 +132,7 @@
             font-size: 20;
             background-color: #384259;
             color: white;
-            width: 30%;
+            width: 40%;
         }
 
         
@@ -207,20 +210,15 @@
 
             </tr>
             <tr>
-                <th>{{headings[1]}}</th>
-                <td>{{s['car_name']}}</td>
-
+                <th>{{headings[1]}} AND MODEL</th>
+                <td>{{s['car_name']}} {{s['model']}}</td>
             </tr>
             <tr>
                 <th>{{headings[2]}}</th>
                 <td>{{s['company']}}</td>
 
             </tr>
-            <tr>
-                <th>{{headings[3]}}</th>
-                <td>{{s['model']}}</td>
-
-            </tr>
+         
             <tr>
                 <th>{{headings[4]}}</th>
                 <td>{{s['Registration_num']}}</td>
@@ -241,33 +239,34 @@
                 <th>{{headings[7]}}</th>
                 <td>{{s['s_time']}}</td>
             </tr>
-
+            {% if s['Specifications']!="NA" %}
             <tr>
                 <th>{{headings[8]}}</th>
                 <td>{{s['Specifications']}}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>{{headings[9]}}</th>
                 <td>{{s['delivery_type']}}</td>
             </tr>
 
+            {% if s['delivery_type']=="pickup" %}
+
             <tr>
                 <th>{{headings[10]}}</th>
-                <td>{{s['address']}}</td>
+                <td>{{s['address']}} </td>
             </tr>
             <tr>
                 <th>{{headings[11]}}</th>
                 <td>{{s['pincode']}}</td>
             </tr>
-            <tr>
-                <th>Admin Remark</th>
-                <td>{{s['admin_remark']}}</td>
-            </tr>
+            {% endif %}
+         
             
             <form id="pending" method="POST">
                 <tr>
                     <th>
-                        <label class="l1" for="admin_remark">Admin Remark : </label> 
+                        <label class="l1" for="admin_remark">ADMIN REMARK </label> 
                     </th>
                     <td>
                         <textarea form="pending" name="admin_remark" id="admin_remark" cols="20" rows="10"></textarea><br>
@@ -275,7 +274,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <label class="l1" for="service_amount">Service amount : </label> 
+                        <label class="l1" for="service_amount">ENTER SERVICE AMOUNT </label> 
                     </th>
                     <td>
                         <input type="text" name="service_amount"><br>
@@ -283,7 +282,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <label class="l1" for="additional_parts">Additional parts Amount: </label> 
+                        <label class="l1" for="additional_parts">ENTER ADDITIONAL PARTS AMOUNT</label> 
                     </th>
                     <td>
                         <input type="text" name="additional_parts"><br>
@@ -291,7 +290,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <label class="l1" for="other_amount">Other amount (if any): </label> 
+                        <label class="l1" for="other_amount">OTHER AMOUNT (if any): </label> 
                     </th>
                     <td>
                         <input type="text" name="other_amount"><br>

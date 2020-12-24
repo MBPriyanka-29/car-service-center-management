@@ -179,6 +179,10 @@ def login():
                 n=cur1.fetchone()
                 aname=n['a_fname']
                 session['a_name']=aname
+                cur1.execute("SELECT s_name FROM service_station WHERE admin_id = %s ", (auid,))
+                n=cur1.fetchone()
+                session['a_station']=n['s_name']
+                print(session['a_station'])
 
                 if apassword == password_candidate:
                     return redirect(url_for('dashboard_a'))
@@ -238,9 +242,11 @@ def forgotpassword():
 def dashboard_a():
     a_name=session['a_name']
     aid=session['aid']
+    station=session['a_station']
     counts=[]
     cur = mysql.connection.cursor()
     print(aid)
+    
     
     # total requests recieved
     result_cs = cur.execute("select count(service.admin_id) from service where service.admin_id=%s",(aid,))
@@ -295,7 +301,7 @@ def dashboard_a():
             return redirect(url_for('pending'))
         elif buttonvalue=="completed":
             return redirect(url_for('completed'))
-    return render_template('dashboard_a.html',a_name=a_name,count=counts)
+    return render_template('dashboard_a.html',a_name=a_name,count=counts,station=station)
 
 @app.route('/addMechanics', methods=['GET', 'POST'])
 def addMechanics():
@@ -498,7 +504,7 @@ def serviceRequest(admin):
             flash(
                 'Service requested successfully!You chose to pick up car from your location.', 'success')
             flash('Please wait for the approval from service station!', 'success')
-            return render_template('dashboard_c.html')
+            return redirect(url_for('dashboard_c'))
         else:
             cid = session['cid']
             cur.execute("insert into car(car_name,company,model,Registration_num,customer_id) values(%s,%s,%s,%s,%s)",
@@ -517,7 +523,7 @@ def serviceRequest(admin):
             flash(
                 'Service requested successfully!You chose to drop your car at the service station.', 'success')
             flash('Please wait for the approval from service station!', 'success')
-            return render_template('dashboard_c.html')
+            return redirect(url_for('dashboard_c'))
 
     return render_template('serviceRequest.html')
 
@@ -541,10 +547,18 @@ def serviceHistory():
         service_id = request.args['view']
         curso = mysql.connection.cursor()
         curso.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.service_id = %s", (service_id,))
-        indiservice = curso.fetchall()
+        indiservice = curso.fetchone()
+        
+        curso.execute("select * from service,service_station where service.admin_id=service_station.admin_id and service.admin_id=%s",(indiservice['admin_id'],))
+        station=curso.fetchone()
+        print(station)
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE', 'STATUS OF REQUEST','REQUEST FINALISATION']
-        return render_template('viewServiceRequest.html', indiservice=indiservice, headings=headings)
+        if indiservice['mechanic_id']!="none":
+            curso.execute("select * from mechanic where mechanic_id=%s",(indiservice['mechanic_id'],))
+            mechanic=curso.fetchone()
+            return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station,mechanic=mechanic)
+        return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station)
     return render_template('serviceHistory.html', car_service=car_service)
 
 
@@ -568,28 +582,40 @@ def new():
         indiservice = curso.fetchall()
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE','REQUEST FINALISATION']
+        r=curso.execute("select m_fname,mechanic_id from mechanic where mechanic.m_status=0 and mechanic.admin_id = %s", (aid,))
         
-        if request.method == "POST":
-            print("in post")
-            service = request.form
-            s_status = service['s_status']
-            print("s_status: ", s_status)
-            buttonvalue = service['ServiceCompletedButton']
-            if buttonvalue == "ServiceCompleted":
-                print("Button clicked")
-                if s_status == "selected":
-                    status = 2
-                else:
-                    status = 1
-                print("status", status)
-                cur = mysql.connection.cursor()
-                cur.execute(
-                    "UPDATE service SET s_status=%s WHERE service_id=%s", (status, service_id))
-                mysql.connection.commit()
-                cur.close()
-                flash("STATUS of request updated successfuly!", 'success')
-                return redirect('/new')
-        return render_template('newView.html', indiservice=indiservice, headings=headings)
+        if r>0:
+            mech= curso.fetchall()
+            if request.method == "POST":
+                service = request.form
+                s_status = service['s_status']
+                mechanic_id=service['mechanic_id']
+                buttonvalue = service['ServiceCompletedButton']
+                if buttonvalue == "ServiceCompleted":
+                    if s_status == "selected":
+                        status = 2
+                        cur1 = mysql.connection.cursor()
+                        cur1.execute("UPDATE mechanic set mechanic.m_status=1 where mechanic.mechanic_id=%s",(mechanic_id,))
+                        mysql.connection.commit()
+                        cur = mysql.connection.cursor()
+                        cur.execute("UPDATE car SET car.mechanic_id=%s where car.Registration_num=(SELECT car.Registration_num from car_claims_service  where car_claims_service.Registration_num=car.Registration_num and car_claims_service.service_id=%s)",(mechanic_id,service_id))
+                        mysql.connection.commit()
+                        flash("Mehchanic is assigned!", 'success')
+                    else:
+                        status = 1
+                    cur = mysql.connection.cursor()
+                    cur.execute(
+                        "UPDATE service SET s_status=%s WHERE service_id=%s", (status, service_id))
+                    mysql.connection.commit()
+                    cur.close()
+                    cur1.close()
+                    flash("STATUS of request updated successfuly!", 'success')
+                    return redirect('/new')
+            return render_template('newView.html', indiservice=indiservice, headings=headings,mech=mech)
+            
+        else:
+            flash("No mechanics available to provide service! Either enter a new mechanic, or wait for vacancy of the exisiting one!","error")
+            return redirect(url_for("dashboard_a"))
     return render_template('new.html', car_service=car_service)
 
 
@@ -681,18 +707,19 @@ def pending():
                     mysql.connection.commit()
                     cur.execute("SELECT SUM(service_amount+additional_parts+other_amount) from service WHERE service_id=%s",(service_id,))
                     total=cur.fetchone()
-                    
                     final_amount=total['SUM(service_amount+additional_parts+other_amount)']
                     print("final_amount {}".format(final_amount))
                     cur.execute("UPDATE service SET final_amount=%s WHERE service_id=%s", (final_amount,service_id))
                     mysql.connection.commit()
+                    cur.execute("UPDATE mechanic SET mechanic.m_status=0 WHERE mechanic.mechanic_id=(SELECT car.mechanic_id FROM car,car_claims_service where car_claims_service.Registration_num=car.Registration_num and car_claims_service.service_id=%s)",(service_id,))
+                    mysql.connection.commit()
                     cur.close()
-                    flash("request finalised successfuly!", 'success')
+                    flash("Request finalised successfuly!", 'success')
                     return redirect('/pending')
                 else:
                     status = 1
-                flash("request not finalised!", 'error')
-                return redirect('/pending')
+                    flash("request not finalised!", 'error')
+                    return redirect('/pending')
         return render_template('viewPending.html', indiservice=indiservice, headings=headings)
     return render_template('pending.html', car_service=car_service)
 
@@ -713,9 +740,12 @@ def completed():
         curso = mysql.connection.cursor()
         curso.execute("select * from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.service_id = %s", (service_id,))
         indiservice = curso.fetchall()
+        curso.execute("select * from service,customer where customer.customer_id=service.customer_id and service.service_id = %s", (service_id,))
+        customer=curso.fetchone()
+        print(customer)
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE','REQUEST FINALISATION']
-        return render_template('viewCompleted.html', indiservice=indiservice, headings=headings)
+        return render_template('viewCompleted.html', indiservice=indiservice, headings=headings,customer=customer)
     return render_template('completed.html', car_service=car_service)
 
 

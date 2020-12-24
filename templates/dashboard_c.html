@@ -110,35 +110,46 @@
 
         hr {
             border: 1px solid #f1f1f1;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
         }
-        .button {
+        
+        .button1 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
             background-color: #0278ae;
             color: white;
-            font-weight: bolder;
-            font-size: 30;
-            padding: 50px 0px 165px 0px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 500;
-            height: 150;
-            opacity: 0.9;
-            margin-bottom: 40px;
-            border-radius: 15px 50px 30px;
-            margin: 30 30 30 30;
-            position: relative;
-            bottom: 20px;
-            right: 20px;
-            margin-left: 250;
-            text-align: center;
-        }
-
-        .button:hover {
-            background-color: #51adcf;
-            opacity: 1;
-        }
-
+        }.button1:hover {opacity: 1;background-color: #51adcf;  }
+        .button2 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
+            background-color: #ff8e71;
+            color: white;
+        } .button2:hover {opacity: 1;background-color: #ffba93;  }
+        .button3 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
+            background-color: #c56183;
+            color: white;
+        } .button3:hover {opacity: 1;background-color: #e6739f;  }
+        .button4 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
+            background-color: #59886b;
+            color: white;
+        } .button4:hover {opacity: 1;background-color:#bedbbb ;  }
+       
+        .button5 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
+            background-color: #8675a9;
+            color: white;
+        } .button5:hover {opacity: 1;background-color:#c3aed6;  }
+        .button6 {
+            font-weight: bolder;font-size: 30;padding: 50px 0px 165px 0px;margin: 8px 0;border: none;cursor: pointer;width: 500;height: 150;opacity: 0.9;
+            margin-bottom: 40px;border-radius: 15px 50px 30px;margin: 30 30 30 30;position: relative;bottom: 20px;right: 20px;margin-left: 250;text-align: center;
+            background-color: #c26565;
+            color: white;
+        } .button6:hover {opacity: 1;background-color:#d49a89;  }
         .count {
             color: black;
             text-shadow: 6px 6px 10px gray;
@@ -159,6 +170,20 @@
             text-shadow: 6px 6px 10px black;
             font-family: 'Gochi Hand', cursive;
         }
+        
+        .initial {
+            text-align: center;
+            background-image: url('static/images/w9.jpg');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            
+          
+        }
+        .new{
+            
+            background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
+        }
     </style>
 </head>
 
@@ -173,20 +198,23 @@
         <a href="/serviceHistory">service history</a>
     </div>
     <div style="text-align: center;">
-        <h3 class="heading1" style="margin-top: 30px; margin-bottom: 30px;">Welcome {{c_name}} !</h3>
-        <hr>
+        <h1 class="heading1" style="margin-top: 10px; margin-bottom: 10px;">Welcome {{c_name}} !</h1>
+        
+        <div class="initial">
+            <div class="new">
+                
         <form method="POST">
             <table>
                 <tr>
                     <td>
-                        <button id="buttons" class="button" name="button" value="requested">
+                        <button id="buttons" class="button1" name="button" value="requested">
                             <div class="name"> Requested services
                             </div><br>
                             <span class="count">{{count[0]}}</span>
                         </button>
                     </td>
                     <td>
-                        <button id="buttons" class="button" name="button" value="requested">
+                        <button id="buttons" class="button2" name="button" value="requested">
                             <div class="name"> Completed services
                             </div><br>
                             <span class="count">{{count[1]}}</span>
@@ -195,7 +223,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button id="buttons" class="button" name="button" value="requested">
+                        <button id="buttons" class="button3" name="button" value="requested">
                             <div class="name"> Waiting for approval
                             </div><br>
                             <span class="count">{{count[2]}}</span>
@@ -203,7 +231,7 @@
 
                     </td>
                     <td>
-                        <button id="buttons" class="button" name="button" value="requested">
+                        <button id="buttons" class="button4" name="button" value="requested">
                             <div class="name"> Waiting for bill
                             </div><br>
                             <span class="count">{{count[3]}}</span>
@@ -212,7 +240,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button id="buttons" class="button" name="button" value="requested">
+                        <button id="buttons" class="button5" name="button" value="requested">
                             <div class="name"> Rejected services
                             </div><br>
                             <span class="count">{{count[4]}}</span>
@@ -225,6 +253,9 @@
 
         </form>
 
+            </div>
+        </div>
+      
     </div>
 </body>
 

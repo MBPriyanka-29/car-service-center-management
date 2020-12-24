@@ -129,11 +129,11 @@
                 <td>{{cs['s_name']}}</td>
                 <td>{{cs['service_request_date']}}</td>
                 {%if cs['status']==2 %}
-                <td style="color: green;">request accepted</td>
+                <td style="color: green; font-weight: bold;">request accepted</td>
                 {% elif cs['status']==1 %}
-                <td style="color:red;">request Cancelled</td>
+                <td style="color:red;  font-weight: bold;">request Cancelled</td>
                 {% else %}
-                <td style="color:orange;">Wait for admin approval </td>
+                <td style="color:orange;  font-weight: bold;">Wait for admin approval </td>
                 {%endif%}
                 <td><a href="/new?view={{cs['service_id']}}">View details</a></td>
             </tr>
