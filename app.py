@@ -551,12 +551,12 @@ def serviceHistory():
         
         curso.execute("select * from service,service_station where service.admin_id=service_station.admin_id and service.admin_id=%s",(indiservice['admin_id'],))
         station=curso.fetchone()
-        print(station)
         headings = ['SERVICE REQUESTED ON', 'CAR NAME', 'COMAPNY', 'MODEL', 'REGISTRATION NUMBER', 'SERVICE TYPE', 'SERVICE DATE',
                     'TIME', 'SPECIFICATIONS', 'DELIVERY TYPE', 'PICKUP ADDRESS', 'PINCODE','ADMIN REMARK','ADMIN REMARK DATE', 'STATUS OF REQUEST','REQUEST FINALISATION']
         if indiservice['mechanic_id']!="none":
             curso.execute("select * from mechanic where mechanic_id=%s",(indiservice['mechanic_id'],))
             mechanic=curso.fetchone()
+            print(mechanic)
             return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station,mechanic=mechanic)
         return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station)
     return render_template('serviceHistory.html', car_service=car_service)
@@ -648,14 +648,14 @@ def rejected():
                 if check == "yes":
                     s_status = service['s_status']
                     if s_status == "selected":
-                        status = 2
+                        status = 0
                         cur = mysql.connection.cursor()
                         cur.execute(
                             "UPDATE service SET s_status=%s WHERE service_id=%s", (status, service_id))
                         mysql.connection.commit()
                         cur.close()
                         flash("STATUS of request updated successfuly!", 'success')
-                        return redirect('/rejected')
+                        return redirect('/new')
                     else:
                         status = 1
                 else:

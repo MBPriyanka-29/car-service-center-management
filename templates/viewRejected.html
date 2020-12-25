@@ -223,14 +223,17 @@
                 <td>{{s['delivery_type']}}</td>
             </tr>
 
+            {% if s['delivery_type']=="pickup" %}
+
             <tr>
                 <th>{{headings[10]}}</th>
-                <td>{{s['address']}}</td>
+                <td>{{s['address']}} </td>
             </tr>
             <tr>
                 <th>{{headings[11]}}</th>
                 <td>{{s['pincode']}}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>{{headings[12]}}</th>
                 <td>{{s['admin_remark']}}</td>
@@ -278,7 +281,7 @@
 
             <div class="button">
                 <button type="submit" name="update" value="update" class="request">
-                    Service status updated</button>
+                    Update Service status </button>
             </div>
 
             <div id="ifYes" style="display: none;">

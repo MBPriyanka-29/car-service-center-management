@@ -296,13 +296,14 @@
                 <td style="color:orange;font-weight: bold">Yet to be finalised </td>
                 {%endif%}
             </tr>
+            {%if s['admin_status']==2 %}
             <tr>
                 <th>FINAL AMOUNT</th>
-                {%if s['admin_status']==2 %}
+                
                 <td style="color: indianred;font-weight: bold">₹ {{s['final_amount']}}</td>
                
-                {%endif%}
             </tr>
+            {%endif%}
 
         </table>
 
