@@ -130,10 +130,12 @@ tax float default 0,
 discount float default 0,
 final_amount float default 0,
 admin_id bigint,
+feedback int default 0,
 primary key(service_id),
 foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade,
 foreign key(admin_id) references admin(admin_id) on delete cascade on update cascade
 );
+#alter table service add column feedback int default 0;
 #drop table service;
 #alter table service add column admin_id bigint;
 #ALTER TABLE service
@@ -142,6 +144,7 @@ alter table service AUTO_INCREMENT=100;
 #alter table service drop column s_status;
 #alter table service alter address set default 'NA';
 #alter table service add column s_status int default 0 ;
+/*
 
 #------------------------------ BILL ---------------
 create table bill(
@@ -161,6 +164,9 @@ foreign key(customer_id) references customer(customer_id) on delete cascade on u
 );
 #drop table bill;
 alter table bill AUTO_INCREMENT=21000;
+*/
+
+
 #------------------------------ CAR ---------------
 create table car(
 car_name varchar(50),
@@ -182,6 +188,8 @@ foreign key(mechanic_id) references mechanic(mechanic_id) on delete cascade on u
 #alter table car drop column Liscence_num;
 #delete from car where car_name='swift dzire';
 #delete from service where s_name='FullService';
+
+/*
 #------------------------------ INSURANCE ---------------
 create table insurance(
 insurance_id bigint AUTO_INCREMENT,
@@ -194,6 +202,8 @@ foreign key(Registration_num ,customer_id) references car(Registration_num,custo
 #foreign key(customer_id) references customer(customer_id) on delete cascade on update cascade
 );
 alter table insurance AUTO_INCREMENT=3000;
+*/
+
 
 #------------------------------ CAR SERVICE ---------------
 create table car_claims_service(
@@ -213,7 +223,7 @@ station_id bigint,
 service_id bigint,
 primary key(station_id,service_id)
 );
-
+/*
 #------------------------------ PAYS ---------------
 create table pays(
 customer_id bigint,
@@ -227,3 +237,5 @@ foreign key(admin_id) references admin(admin_id) on delete cascade on update cas
 foreign key(bill_id) references bill(bill_id) on delete cascade on update cascade
 );
 #drop table pays;
+
+*/

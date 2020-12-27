@@ -1,10 +1,31 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session,json,jsonify
 from flask_mysqldb import MySQL
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from datetime import datetime
+import json
 import yaml
 import os
 import itertools
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from pymongo import MongoClient  
+import seaborn as sns
+import shutil
+  
+i=2
+j=100
+# Making Connection 
+myclient = MongoClient("mongodb://localhost:27017/")  
+   
+# database  
+db = myclient["car_mongo"] 
+   
+# Created or Switched to collection  
+# names: GeeksForGeeks 
+Collection = db["districts"] 
+Collection_rating=db["rating"]
+
 
 # pip install -U Werkzeug==0.16.0
 
@@ -60,6 +81,22 @@ def register_customer():
                                 cur.execute(
                                     "insert into login_customer values(%s,%s,%s)", (customer_id, emailID, pswd))
                                 mysql.connection.commit()
+                                # convert customer table to json file
+                                cur.execute("select * from customer")
+                               # row_headers=[x[0] for x in cur.description] #this will extract row headers
+                                customer_table=cur.fetchall()
+                                print(customer_table)
+                                customer=[]
+                                contents={}
+                                for result in customer_table:
+                                    contents={"customer_id":result['customer_id'], "c_fname":result['c_fname'], "c_lname":result['c_lname'], "first_address":result['first_address'], "district":result['district'], "state":result['state'], "pincode":result['pincode'],"phone_num":result['phone_num'], "emailID":result['emailID']}
+                                    customer.append(contents)
+                                    contents={}
+                                with open('customer_json.json','w') as file:
+                                    json.dump(customer,file)
+                                #return jsonify(customer)
+                                ######################################
+
                                 cur.close()
                                 flash(
                                     "You have registered as a customer successfully!", 'success')
@@ -113,6 +150,21 @@ def register_admin():
                             cur.execute("insert into service_station(s_name,first_address,district,pincode,admin_id,s_num) values(%s,%s,%s,%s,%s,%s)", (
                                 s_name, first_address, district, pincode, admin_id, s_num))
                             mysql.connection.commit()
+                            # convert station to json file
+                            cur.execute("select district from service_station")
+                            # row_headers=[x[0] for x in cur.description] #this will extract row headers
+                            district=cur.fetchall()
+                            print(district)
+                            d=[]
+                            contents={}
+                            for result in district:
+                                contents={"district:":result['district']}
+                                d.append(contents)
+                                contents={}
+                            with open('district_json.json','w') as file:
+                                json.dump(d,file)
+                            
+                            ######################################
                             cur.close()
                             flash(
                                 "You have registered as an admin successfully!", 'success')
@@ -388,36 +440,6 @@ def dashboard_c():
       #  bt=request.form
       #  buttonvalue=bt['button']
         return redirect(url_for('serviceHistory'))
-        '''
-        if buttonvalue=='requested':
-            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s",(cid,))
-            n=cur.fetchone()
-   
-            count=n['count(car.customer_id)']
-            return redirect(url_for('serviceHistory'))
-        elif buttonvalue=='completed':
-            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=2",(cid,))
-            n=cur.fetchone()
-            count=n['count(car.customer_id)']
-            return redirect(url_for('serviceHistory'))
-
-        elif buttonvalue=='waitingApproval':
-            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=0",(cid,))
-            n=cur.fetchone()
-            count=n['count(car.customer_id)']
-            return redirect(url_for('serviceHistory'))
-
-        elif buttonvalue=='waitingBill':
-            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.admin_status=0 and service.s_status=2",(cid,))
-            n=cur.fetchone()
-            count=n['count(car.customer_id)']
-            return redirect(url_for('serviceHistory'))
-        elif buttonvalue=='rejected':
-            result_cs = cur.execute("select count(car.customer_id) from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and car_claims_service.customer_id=%s and service.s_status=1",(cid,))
-            n=cur.fetchone()
-            count=n['count(car.customer_id)']
-            return redirect(url_for('serviceHistory'))
-        '''
         cur.close()
     return render_template('dashboard_c.html',c_name=c_name,count=counts)
 
@@ -485,20 +507,6 @@ def serviceRequest(admin):
                         (sid['service_id'], Registration_num, cid))
 
             mysql.connection.commit()
-            '''
-            a=cur.execute("insert into bill(bill_date,customer_id) values(%s,%s)",(formatted_date,cid))
-            print("date and cid in bill done!")
-            if a>0:
-                flash("Bill table entered!"'success')
-                mysql.connection.commit()
-                b=cur.fetchone()
-               # bill_id=b['bill_id']
-               # print("bill_id")
-                cur.execute("insert into pays(customer_id,service_id,admin_id,bill_id) values(%s,%s,%s,%s)",(cid,sid['service_id'],admin,bill_id))
-                mysql.connection.commit()
-            else:
-                flash("bill table not entered!",'error')
-            '''
 
             cur.close()
             flash(
@@ -557,7 +565,27 @@ def serviceHistory():
             curso.execute("select * from mechanic where mechanic_id=%s",(indiservice['mechanic_id'],))
             mechanic=curso.fetchone()
             print(mechanic)
-            return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station,mechanic=mechanic)
+            curso.execute("select service.feedback from service,car,car_claims_service where service.service_id=car_claims_service.service_id and car.Registration_num=car_claims_service.Registration_num and service.service_id = %s", (service_id,))
+            
+           # curso.execute("select service.feedback from service,service_station where service.admin_id=service_station.admin_id and service.admin_id=%s",(indiservice['admin_id'],))
+            feedback=curso.fetchone()
+            #Collection_rating=db["rating"]
+            print(feedback)
+            print(feedback['feedback'])
+            if feedback['feedback']==0:
+                if request.method == 'POST':
+                    star = request.form
+                    rating=star['rate']
+                    buttonvalue=star['submit_button']
+                    print(buttonvalue)
+                    print(rating)
+                    Collection_rating.insert({'admin_id': indiservice['admin_id'], 'rating': rating,'service_id':service_id})
+                    curso.execute("update service set feedback=1 where service_id=%s",(service_id,))
+                    mysql.connection.commit()
+                    flash("Feedback submitted","success")
+                    return redirect('/dashboard_c')
+           
+            return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station,mechanic=mechanic,feedback=feedback)
         return render_template('viewServiceRequest.html', s=indiservice, headings=headings,station=station)
     return render_template('serviceHistory.html', car_service=car_service)
 
@@ -748,6 +776,107 @@ def completed():
         return render_template('viewCompleted.html', indiservice=indiservice, headings=headings,customer=customer)
     return render_template('completed.html', car_service=car_service)
 
+@app.route('/district_vs_count', methods=['GET', 'POST'])
+def district_vs_count():
 
+    '''
+    # Making Connection 
+    myclient = MongoClient("mongodb://localhost:27017/")  
+    
+    # database  
+    db = myclient["car_mongo"] 
+    
+    # Created or Switched to collection  
+    # names: GeeksForGeeks 
+    Collection = db["trial"] 
+    '''
+    global i
+    print(i)
+   # img_path="static/images/district_vs_count/output"+str(i)+".png"
+   # os.remove(img_path)
+
+    
+    d='static/images/district_vs_count'
+    filesToRemove = [os.path.join(d,f) for f in os.listdir(d)]
+    for f in filesToRemove:
+        os.remove(f) 
+    
+    '''
+    shutil.rmtree('static/images/district_vs_count') 
+    parent_dir="static/images"
+    directory="district_vs_count"
+    path = os.path.join(parent_dir, directory) 
+    os.mkdir(path)
+    '''
+    #img_path_rm="static/images/district_vs_count/output"+str(i)+".png"
+    #os.remove(img_path_rm)
+    x=Collection.delete_many({})
+    #
+    # Loading or Opening the json file 
+    with open('district_json.json') as file: 
+        print("Reading file")
+        file_data = json.load(file) 
+        
+    # Inserting the loaded data in the Collection 
+    # if JSON contains data more than one entry 
+    # insert_many is used else inser_one is used 
+    if isinstance(file_data, list): 
+        Collection.insert_many(file_data)   
+    else: 
+        Collection.insert_one(file_data)
+    print("In mongo")
+
+    df = pd.DataFrame(list(Collection.find()))
+    print(df)
+    sns_plot=sns.countplot(y='district:',data=df)
+    figure = sns_plot.get_figure()    
+    #figure.savefig('svm_conf.png', dpi=400)
+    i=i+1
+    d='static/images/district_vs_count'
+    output_file=str(i)+".jpg"
+    img_path=os.path.join(d,output_file)
+   # img_path="static/images/district_vs_count/output"+str(i)+".png"
+   # print()
+    figure.savefig(img_path)
+    #return "mongo"
+   # print("hello")
+    #img_path="static/images/district_vs_count/output{}.png".format(i)
+    return render_template('district_vs_count.html',name = 'output',url=img_path)
+
+@app.route('/admin_ratings', methods=['GET', 'POST'])
+def admin_ratings():
+    flag=0
+    global j
+    aid=session['aid']
+    cur1 = mysql.connection.cursor()
+    result_cs = cur1.execute("select feedback from service where admin_id = %s",(aid,))
+    feedback=cur1.fetchall()
+    for f in feedback:
+        if f['feedback']==1:
+            flag=1
+    if flag==1:
+        d='static/images/rate'
+        filesToRemove = [os.path.join(d,f) for f in os.listdir(d)]
+        for f in filesToRemove:
+            os.remove(f) 
+        df = pd.DataFrame(list(Collection_rating.find( { "admin_id": aid })))
+    # df = pd.concat([data.drop(['rating'], axis=1), data['rating'].apply(pd.Series)], axis=1)
+        print(df)
+        
+        sns_plot=sns.countplot(x='rating',data=df)
+        figure = sns_plot.get_figure()    
+        #figure.savefig('svm_conf.png', dpi=400)
+        j=j+1
+        d='static/images/rate'
+        output_file=str(j)+".jpg"
+        img_path=os.path.join(d,output_file)
+    # img_path="static/images/district_vs_count/output"+str(i)+".png"
+    # print()
+        figure.savefig(img_path)
+        return render_template('admin_ratings.html',url=img_path)
+    else:
+        flash("No feedback recieved!","error")
+        return redirect('/dashboard_a')
+    return render_template('admin_ratings.html')
 if __name__ == '__main__':
     app.run(debug=True)
